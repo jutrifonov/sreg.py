@@ -83,15 +83,15 @@ def lm_iter_sreg(Y, S, D, X):
 #testim[0]
 #testim[1]
 
-#data = pd.read_csv("/Users/trifonovjuri/Desktop/sreg.py/src/sreg.py/data_cl.csv")
-#print(data.head())
+# data = pd.read_csv("/Users/trifonovjuri/Desktop/sreg.py/src/sreg.py/data_cl.csv")
+# print(data.head())
 # Select the columns
-#Y = data['Y']
-#D = data['D']
-#S = data['S']
-#G_id = data['G.id']
-#Ng = data['Ng']
-#X = data[['x_1', 'x_2']]
+# Y = data['Y']
+# D = data['D']
+# S = data['S']
+# G_id = data['G.id']
+# Ng = data['Ng']
+# X = data[['x_1', 'x_2']]
 
 def lm_iter_creg(Y, S, D, G_id, Ng, X):
     # Create working DataFrame
