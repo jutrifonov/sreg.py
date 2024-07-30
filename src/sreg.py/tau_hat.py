@@ -52,8 +52,7 @@ import pandas as pd
 
 def tau_hat_sreg(Y, S, D, X=None, model=None):
     tau_hat = np.zeros(np.max(D))
-    for d in (1, np.max(D)):
-        print(d)
+    for d in range(1, np.max(D) + 1):
         if X is not None:
             data = pd.DataFrame({'Y': Y, 'S': S, 'D': D})
             X_df = pd.DataFrame(X)
@@ -113,7 +112,7 @@ def tau_hat_creg(Y, S, D, G_id, Ng, X=None, model=None):
         data = cl_lvl_data.copy()
         Ng_full = data['Ng']
         Y_bar_full = data['Y_bar']
-        for d in (1, np.max(D)):
+        for d in range(1, np.max(D) + 1):
             data['pi'] = pi_hat_creg(data['S'], data['D'])[:, d-1]
             data['pi_0'] = pi_hat_creg(data['S'], data['D'], inverse=True)[:, 0]
             data['A'] = np.where(data['D'] == d, 1, np.where(data['D'] == 0, 0, -999999))
