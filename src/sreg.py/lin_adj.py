@@ -82,7 +82,7 @@ def lin_adj_sreg(a, S, X, model):
 #Ng = data['Ng']
 #X = data[['x_1', 'x_2']]
 
-model = lm_iter_creg(Y, S, D, G_id, Ng, X)
+#model = lm_iter_creg(Y, S, D, G_id, Ng, X)
 
 def lin_adj_creg(a, data, model):
     # Extract the X.data part of the data
@@ -100,5 +100,5 @@ def lin_adj_creg(a, data, model):
     return mu_hat
 
 #a = 0
-data = model['cl_lvl_data']
+#data = model['cl_lvl_data']
 #lin_adj_creg(a, data, model)
