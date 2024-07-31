@@ -85,7 +85,7 @@ def lm_iter_sreg(Y, S, D, X):
 
 # data = pd.read_csv("/Users/trifonovjuri/Desktop/sreg.py/src/sreg.py/data_cl.csv")
 # print(data.head())
-# Select the columns
+# #Select the columns
 # Y = data['Y']
 # D = data['D']
 # S = data['S']
@@ -101,9 +101,12 @@ def lm_iter_creg(Y, S, D, G_id, Ng, X):
             working_df[col] = X.iloc[:, i]
     else:
         working_df = pd.DataFrame({'Y': Y, 'S': S, 'D': D, 'G_id': G_id})
+        #working_df = working_df.groupby('G_id').apply(lambda x: x.assign(Ng=len(x))).reset_index(drop=True)
+        working_df['Ng'] = working_df.groupby('G_id')['G_id'].transform('count')
         for i, col in enumerate(X.columns):
             working_df[col] = X.iloc[:, i]
-        working_df = working_df.groupby('G_id').apply(lambda x: x.assign(Ng=len(x))).reset_index(drop=True)
+        
+        
     
     # Aggregate Y by G_id
     Y_bar_g = working_df.groupby('G_id')['Y'].mean().reset_index()
@@ -111,8 +114,8 @@ def lm_iter_creg(Y, S, D, G_id, Ng, X):
     
     # Create cl.lvl.data DataFrame
     cl_lvl_data = working_df.drop_duplicates(subset=['G_id', 'D', 'S', 'Ng'] + list(X.columns))
-    cl_lvl_data = pd.merge(Y_bar_g, cl_lvl_data, on='G_id')
-    data = cl_lvl_data
+    cl_lvl_data_1 = pd.merge(Y_bar_g, cl_lvl_data, on='G_id')
+    data = cl_lvl_data_1
     
     # Initialize theta list
     theta_list = [np.full((max(S), X.shape[1]), np.nan) for _ in range(max(D) + 1)]
@@ -133,12 +136,14 @@ def lm_iter_creg(Y, S, D, G_id, Ng, X):
                 model = OLS(data_filtered_adj['Y_bar_Ng'], X_const).fit()
                 theta_list[d][s-1, :] = model.params[1:].values
             except:
-                theta_list[d][s-1, :] = np.nan
+                 [d][s-1, :] = np.nan
 
     return {
         "theta_list": theta_list,
         "cl_lvl_data": data
     }
 
-#testim_2 = lm_iter_creg(Y, S, D, G_id, Ng, X)
-#testim_2['theta_list'][2]
+# model = lm_iter_creg(Y, S, D, G_id, Ng, X)
+# #testim_2 = lm_iter_creg(Y, S, D, G_id, Ng, X)
+# #testim_2['theta_list'][2]
+# Ng = None

@@ -184,7 +184,7 @@ def tau_hat_creg(Y, S, D, G_id, Ng, X=None, model=None):
     
     return rtrn_list
 
-
+# Ng=None
 # model = lm_iter_creg(Y, S, D, G_id, Ng, X)
 
 # resultim = tau_hat_creg(Y, S, D, G_id, Ng, X, model)
