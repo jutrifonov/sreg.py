@@ -181,8 +181,9 @@ def res_creg(Y, S, D, G_id, Ng, X, HC1=True):
 
 
 
-# result=res_creg(Y=Y, S=S, D=D, G_id=G_id, Ng=Ng, X=None, HC1=False)
-# print(result)
+#  result=res_creg(Y=Y, S=S, D=D, G_id=G_id, Ng=Ng, X=X, HC1=False)
+#  print(result)
+# result['tau_hat']
 
 #  result=res_creg(Y = Y, S = S, D = D, G_id = G_id, Ng = None, X = X, HC1=False)
 #  print(result)

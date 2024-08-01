@@ -4,46 +4,46 @@ import pandas as pd
 from scipy.stats import norm
 
 class Sreg:
-    def __init__(self, res_dict):
-        self.__dict__.update(res_dict)
-
+    def __init__(self, result):
+        self.result = result
+    
     def __repr__(self):
         return self.print_sreg()
-
+    
     def print_sreg(self):
-        output = []
-        if 'G_id' not in self.data.columns:
-            n = len(self.data['Y'])
-            tau_hat = np.array(self.tau_hat)
-            se_rob = np.array(self.se_rob)
-            t_stat = np.array(self.t_stat)
-            p_value = np.array(self.p_value)
-            CI_left = np.array(self.CI_left)
-            CI_right = np.array(self.CI_right)
+        if 'G_id' not in self.result['data'].columns:
+            n = len(self.result['data']['Y'])
+            tau_hat = self.result['tau_hat']
+            se_rob = self.result['se_rob']
+            t_stat = self.result['t_stat']
+            p_value = self.result['p_value']
+            CI_left = self.result['CI_left']
+            CI_right = self.result['CI_right']
+            lin_adj = self.result['lin_adj']
 
-            if self.lin_adj is not None:
-                output.append("Saturated Model Estimation Results under CAR with linear adjustments\n")
-                covariates_str = ', '.join(self.lin_adj.columns)
+            if lin_adj is not None:
+                print("Saturated Model Estimation Results under CAR with linear adjustments")
             else:
-                output.append("Saturated Model Estimation Results under CAR\n")
-                covariates_str = 'None'
+                print("Saturated Model Estimation Results under CAR")
 
-            output.append(f"Observations: {n}\n")
-            output.append(f"Number of treatments: {self.data['D'].max()}\n")
-            output.append(f"Number of strata: {self.data['S'].max()}\n")
-            if self.lin_adj is not None:
-                output.append(f"Covariates used in linear adjustments: {', '.join(self.lin_adj.columns)}\n")
-            else:
-                output.append("Covariates used in linear adjustments:\n")
-            output.append("---\n")
-            output.append("Coefficients:\n")
+            print(f"Observations: {n}")
+            print(f"Number of treatments: {self.result['data']['D'].max()}")
+            print(f"Number of strata: {self.result['data']['S'].max()}")
+            if lin_adj is not None:
+                print(f"Covariates used in linear adjustments: {', '.join(lin_adj.columns)}")
+            print("---")
+            print("Coefficients:")
 
-            m = len(tau_hat)
-            stars = np.array([""] * m, dtype=object)
-            stars[p_value <= 0.001] = "***"
-            stars[(p_value > 0.001) & (p_value <= 0.01)] = "**"
-            stars[(p_value > 0.01) & (p_value <= 0.05)] = "*"
-            stars[(p_value > 0.05) & (p_value <= 0.1)] = "."
+            stars = [''] * len(tau_hat)
+            for i, p in enumerate(p_value):
+                if p <= 0.001:
+                    stars[i] = "***"
+                elif p <= 0.01:
+                    stars[i] = "**"
+                elif p <= 0.05:
+                    stars[i] = "*"
+                elif p <= 0.1:
+                    stars[i] = "."
 
             df = pd.DataFrame({
                 "Tau": tau_hat,
@@ -55,51 +55,46 @@ class Sreg:
                 "Significance": stars
             })
 
-            is_df_num_col = df.apply(lambda col: pd.api.types.is_numeric_dtype(col))
-            df.loc[:, is_df_num_col] = df.loc[:, is_df_num_col].round(5)
-            output.append(df.to_string(index=False))
-            output.append("\n---\n")
-            output.append("Signif. codes:  0 `***` 0.001 `**` 0.01 `*` 0.05 `.` 0.1 ` ` 1\n")
-
-            if self.lin_adj is not None:
-                if any([np.isnan(x).any() for x in self.ols_iter]):
-                    raise ValueError("Error: There are too many covariates relative to the number of observations. Please reduce the number of covariates (k = ncol(X)) or consider estimating the model without covariate adjustments.")
-                
+            df = df.round(5)
+            print(df.to_string(index=False))
+            print("---")
+            print("Signif. codes:  0 `***` 0.001 `**` 0.01 `*` 0.05 `.` 0.1 ` ` 1")
+        
         else:
-            n = len(self.data['Y'])
-            G = len(self.data['G_id'].unique())
-            tau_hat = np.array(self.tau_hat)
-            se_rob = np.array(self.se_rob)
-            t_stat = np.array(self.t_stat)
-            p_value = np.array(self.p_value)
-            CI_left = np.array(self.CI_left)
-            CI_right = np.array(self.CI_right)
+            n = len(self.result['data']['Y'])
+            G = len(self.result['data']['G_id'].unique())
+            tau_hat = self.result['tau_hat']
+            se_rob = self.result['se_rob']
+            t_stat = self.result['t_stat']
+            p_value = self.result['p_value']
+            CI_left = self.result['CI_left']
+            CI_right = self.result['CI_right']
+            lin_adj = self.result['lin_adj']
 
-            if self.lin_adj is not None:
-                output.append("Saturated Model Estimation Results under CAR with clusters and linear adjustments\n")
-                covariates_str = ', '.join(self.lin_adj.columns)
+            if lin_adj is not None:
+                print("Saturated Model Estimation Results under CAR with clusters and linear adjustments")
             else:
-                output.append("Saturated Model Estimation Results under CAR with clusters\n")
-                covariates_str = 'None'
+                print("Saturated Model Estimation Results under CAR with clusters")
+            
+            print(f"Observations: {n}")
+            print(f"Clusters: {G}")
+            print(f"Number of treatments: {self.result['data']['D'].max()}")
+            print(f"Number of strata: {self.result['data']['S'].max()}")
+            if lin_adj is not None:
+                print(f"Covariates used in linear adjustments: {', '.join(lin_adj.columns)}")
+            print("---")
+            print("Coefficients:")
 
-
-            output.append(f"Observations: {n}\n")
-            output.append(f"Clusters: {G}\n")
-            output.append(f"Number of treatments: {self.data['D'].max()}\n")
-            output.append(f"Number of strata: {self.data['S'].max()}\n")
-            if self.lin_adj is not None:
-                output.append(f"Covariates used in linear adjustments: {', '.join(self.lin_adj.columns)}\n")
-            else:
-                output.append("Covariates used in linear adjustments:\n")
-            output.append("---\n")
-            output.append("Coefficients:\n")
-
-            m = len(tau_hat)
-            stars = np.array([""] * m, dtype=object)
-            stars[p_value <= 0.001] = "***"
-            stars[(p_value > 0.001) & (p_value <= 0.01)] = "**"
-            stars[(p_value > 0.01) & (p_value <= 0.05)] = "*"
-            stars[(p_value > 0.05) & (p_value <= 0.1)] = "."
+            stars = [''] * len(tau_hat)
+            for i, p in enumerate(p_value):
+                if p <= 0.001:
+                    stars[i] = "***"
+                elif p <= 0.01:
+                    stars[i] = "**"
+                elif p <= 0.05:
+                    stars[i] = "*"
+                elif p <= 0.1:
+                    stars[i] = "."
 
             df = pd.DataFrame({
                 "Tau": tau_hat,
@@ -111,18 +106,12 @@ class Sreg:
                 "Significance": stars
             })
 
-            is_df_num_col = df.apply(lambda col: pd.api.types.is_numeric_dtype(col))
-            df.loc[:, is_df_num_col] = df.loc[:, is_df_num_col].round(5)
-            output.append(df.to_string(index=False))
-            output.append("\n---\n")
-            output.append("Signif. codes:  0 `***` 0.001 `**` 0.01 `*` 0.05 `.` 0.1 ` ` 1\n")
-
-            if 'Ng' not in self.data.columns or self.data['Ng'].isnull().all():
-                output.append("Warning: Cluster sizes have not been provided (Ng = None). Ng is assumed to be equal to the number of available observations in every cluster g.\n")
-            if self.lin_adj is not None:
-                if any([np.isnan(x).any() for x in self.ols_iter]):
-                    raise ValueError("Error: There are too many covariates relative to the number of observations. Please reduce the number of covariates (k = ncol(X)) or consider estimating the model without covariate adjustments.")
-            if self.lin_adj is not None:
-                if not check_cluster(pd.DataFrame({"G_id": self.data['G_id'], **self.lin_adj.to_dict()})):
-                    output.append("Warning: sreg cannot use individual-level covariates for covariate adjustment in cluster-randomized experiments. Any individual-level covariates have been aggregated to their cluster-level averages.\n")
-        return ''.join(output)
+            df = df.round(5)
+            print(df.to_string(index=False))
+            print("---")
+            print("Signif. codes:  0 `***` 0.001 `**` 0.01 `*` 0.05 `.` 0.1 ` ` 1")
+        
+        return ""
+    
+    def __getitem__(self, key):
+        return self.result[key]
