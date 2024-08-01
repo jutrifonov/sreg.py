@@ -8,7 +8,7 @@ from scipy.stats import norm
 def res_sreg(Y, S=None, D=None, X=None, HC1=True):
     n = len(Y)
     if S is None:
-        S = np.ones(n)
+        S = np.ones(n, dtype=int)
     
     if X is not None:
         model = lm_iter_sreg(Y, S, D, X)
@@ -57,24 +57,25 @@ def res_sreg(Y, S=None, D=None, X=None, HC1=True):
             "lin_adj": None
         }
     
-    class Sreg:
-        def __init__(self, res_dict):
-            self.__dict__.update(res_dict)
-        def __repr__(self):
-            return '\n'.join([f'{key}: {value}' for key, value in self.__dict__.items()])
+    # class Sreg:
+    #     def __init__(self, res_dict):
+    #         self.__dict__.update(res_dict)
+    #     def __repr__(self):
+    #         return '\n'.join([f'{key}: {value}' for key, value in self.__dict__.items()])
 
     return Sreg(res_list)
 
-# result=res_sreg(Y, S, D, X, HC1 = True)
-# result=res_sreg(Y, S, D, X = None, HC1 = True)
+# result=res_sreg(Y=Y, S=S, D=D, X=X, HC1 = True)
+# # result=res_sreg(Y, S, D, X = None, HC1 = True)
 # print(result)
+
 
 
 def res_creg(Y, S, D, G_id, Ng, X, HC1=True):
     n = len(Y)
 
     if S is None:
-        S = np.ones(n)
+        S = np.ones(n, dtype=int)
     
     if X is not None:
         df = pd.DataFrame({'G_id': G_id})
@@ -169,19 +170,19 @@ def res_creg(Y, S, D, G_id, Ng, X, HC1=True):
                 "data": pd.DataFrame({'Y': Y, 'S': S, 'D': D, 'G_id': G_id}),
                 "lin_adj": None
             }
-    class Creg:
-        def __init__(self, res_dict):
-            self.__dict__.update(res_dict)
-        def __repr__(self):
-            return '\n'.join([f'{key}: {value}' for key, value in self.__dict__.items()])
+    # class Sreg:
+    #     def __init__(self, res_dict):
+    #         self.__dict__.update(res_dict)
+    #     def __repr__(self):
+    #         return '\n'.join([f'{key}: {value}' for key, value in self.__dict__.items()])
     
-    return Creg(res_list)
+    return Sreg(res_list)
     
 
 
 
-#  result=res_creg(Y, S, D, G_id, Ng, X, HC1=False)
-#  print(result)
+# result=res_creg(Y=Y, S=S, D=D, G_id=G_id, Ng=Ng, X=None, HC1=False)
+# print(result)
 
 #  result=res_creg(Y = Y, S = S, D = D, G_id = G_id, Ng = None, X = X, HC1=False)
 #  print(result)
