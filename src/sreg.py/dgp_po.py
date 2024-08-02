@@ -86,10 +86,13 @@ def dgp_po_creg(Ng, G, tau_vec, sigma1=np.sqrt(2), gamma_vec=[0.4, 0.2, 1], n_tr
 
     return ret_dict
 
-# # Example usage
-# n = 5
-# Ng = np.random.randint(1, 4, size=3)  # Ensure Ng length matches G
-# G = 3
+# # # Example usage
+# n = 100
+# G = n
+# Nmax = 50
+# max_support = Nmax / 10 - 1
+# Ng = gen_cluster_sizes(G, max_support)
+
 # tau_vec = [0.5, 1.5]
 # gamma_vec = [0.4, 0.2, 1]
 # n_treat = 2
