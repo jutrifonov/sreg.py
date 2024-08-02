@@ -27,8 +27,17 @@ def sreg(Y, S=None, D=None, G_id=None, Ng=None, X=None, HC1=True):
             raise ValueError("X should be a pandas DataFrame or a NumPy array.")
     else:
         X_dict = {}
-
+    #if Ng is not None:
     check_df = pd.DataFrame({'Y': Y, 'S': S, 'D': D, 'G_id': G_id, 'Ng': Ng, **X_dict})
+    if G_id is None: 
+        check_df=check_df.drop(columns=['G_id'])
+    #else:
+    #    check_df = pd.DataFrame({'Y': Y, 'S': S, 'D': D, 'G_id': G_id, **X_dict})
+
+    if S is None:
+        check_df=check_df.drop(columns=['S'])
+    if Ng is None:
+        check_df=check_df.drop(columns=['Ng'])
     #check_df = pd.DataFrame({'Y': Y, 'S': S, 'D': D, 'G_id': G_id, 'Ng': Ng, **{f'X{i}': X[:, i] for i in range(X.shape[1])} if X is not None else {}})
 
     if check_df.isnull().any().any():
@@ -38,10 +47,14 @@ def sreg(Y, S=None, D=None, G_id=None, Ng=None, X=None, HC1=True):
     x_ind = max([i for i, col in enumerate(clean_df.columns) if col in ['D', 'G_id', 'Ng']], default=-1)
 
     Y = clean_df['Y']
-    S = clean_df['S']
+    if S is not None:
+        S = clean_df['S']
     D = clean_df['D']
-    G_id = clean_df['G_id']
-    Ng = clean_df['Ng']
+    if G_id is not None:
+        G_id = clean_df['G_id']
+    if Ng is not None:
+        Ng = clean_df['Ng']
+    
     if (x_ind + 1) >= len(clean_df.columns):
         X = None
     else:
@@ -59,20 +72,36 @@ def sreg(Y, S=None, D=None, G_id=None, Ng=None, X=None, HC1=True):
 
     if G_id is None:
         result = res_sreg(Y, S, D, X, HC1)
-        if any(np.isnan(x).any() for x in result['ols_iter']):
-            raise ValueError("Error: There are too many covariates relative to the number of observations. Please reduce the number of covariates (k = ncol(X)) or consider estimating the model without covariate adjustments.")
+        if X is not None:
+            if any(np.isnan(x).any() for x in result['ols_iter']):
+                raise ValueError("Error: There are too many covariates relative to the number of observations. Please reduce the number of covariates (k = ncol(X)) or consider estimating the model without covariate adjustments.")
     else:
         check_cluster_lvl(G_id, S, D, Ng)
         result = res_creg(Y, S, D, G_id, Ng, X, HC1)
-        if result['data']['Ng'].isnull().all():
+        if Ng is None:
             print("Warning: Cluster sizes have not been provided (Ng = None). Ng is assumed to be equal to the number of available observations in every cluster g.")
-        if any(np.isnan(x).any() for x in result['ols_iter']):
-            raise ValueError("Error: There are too many covariates relative to the number of observations. Please reduce the number of covariates (k = ncol(X)) or consider estimating the model without covariate adjustments.")
+        if X is not None:
+            if any(np.isnan(x).any() for x in result['ols_iter']):
+                raise ValueError("Error: There are too many covariates relative to the number of observations. Please reduce the number of covariates (k = ncol(X)) or consider estimating the model without covariate adjustments.")
         if result['lin_adj'] is not None:
             if not check_cluster(pd.DataFrame({'G_id': result['data']['G_id'], **result['lin_adj']})):
                 print("Warning: sreg cannot use individual-level covariates for covariate adjustment in cluster-randomized experiments. Any individual-level covariates have been aggregated to their cluster-level averages.")
 
     return result
 
-resultim=sreg(Y, S=S, D=D, G_id=G_id, Ng=Ng, X=X, HC1=True)
-print(resultim)
+# S[2]=0.23
+# G_id[5]=8.98
+# resultim=sreg(Y=Y, S=None, D=D, G_id=G_id, Ng=Ng, X=X, HC1=True)
+# print(resultim)
+# Ng = None
+# S=None
+# D[2]=1.2
+
+# aejapp=sreg(Y=Y, S=S, D=D, X=X)
+# print(aejapp)
+# X=None
+# print(aejapp)
+# Ng=None
+# G_id=None
+# G_id
+# X=None
