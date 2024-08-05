@@ -36,18 +36,6 @@ def dgp_po_sreg(n, theta_vec, gamma_vec, n_treat, is_cov=True):
 
     return ret_list
 
-
-# n = 100
-# theta_vec = [0.5, 1.5]
-# gamma_vec = [0.1, 0.2, 0.3]
-# n_treat = 2
-# is_cov = True
-
-# np.random.seed(123)
-# result = dgp_po_sreg(n, theta_vec, gamma_vec, n_treat, is_cov)
-# result['Y_1']
-
-
 def dgp_po_creg(Ng, G, tau_vec, sigma1=np.sqrt(2), gamma_vec=[0.4, 0.2, 1], n_treat=None):
     if n_treat is None:
         n_treat = len(tau_vec)
@@ -85,19 +73,3 @@ def dgp_po_creg(Ng, G, tau_vec, sigma1=np.sqrt(2), gamma_vec=[0.4, 0.2, 1], n_tr
     ret_dict = {**Yig_dict, 'Yig_0': Yig_0, 'Z_g_2': Z_g_2, 'X': X, 'G': G, 'Ng': Ng, 'cl_id': cl_id, **m_dict, **mu_dict}
 
     return ret_dict
-
-# # # Example usage
-# n = 100
-# G = n
-# Nmax = 50
-# max_support = Nmax / 10 - 1
-# Ng = gen_cluster_sizes(G, max_support)
-
-# tau_vec = [0.5, 1.5]
-# gamma_vec = [0.4, 0.2, 1]
-# n_treat = 2
-
-# np.random.seed(0)
-# result = dgp_po_creg(Ng, G, tau_vec, gamma_vec=gamma_vec, n_treat=n_treat)
-# print(result)
-# result['Yig_0']

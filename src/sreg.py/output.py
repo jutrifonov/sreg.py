@@ -1,7 +1,5 @@
 #' Print \code{sreg} Objects
-import numpy as np
 import pandas as pd
-from scipy.stats import norm
 
 class Sreg:
     def __init__(self, result):

@@ -1,28 +1,6 @@
 import pandas as pd
 import numpy as np
 
-# Load the dataframe from the CSV file
-#data = pd.read_csv("/Users/trifonovjuri/Desktop/sreg.py/src/sreg.py/data.csv")
-
-# Display the first few rows of the dataframe
-#print(data.head())
-
-# Select the columns
-#Y = data['gradesq34']
-#D = data['treatment']
-#S = data['class_level']
-
-# Create a new DataFrame with selected columns
-#data_clean = pd.DataFrame({'Y': Y, 'D': D, 'S': S})
-
-# Replace values in column D
-#data_clean['D'] = data_clean['D'].apply(lambda x: 0 if x == 3 else x)
-
-# Extract the columns again
-#Y = data_clean['Y']
-#D = data_clean['D']
-#S = data_clean['S']
-
 #-------------------------------------------------------------------
 # %#     Function that implements the calculation of \hat{\pi} --
 # %#     i.e., calculates the proportions assigned to treatments
@@ -59,19 +37,6 @@ def pi_hat_sreg(S, D, inverse=False):
     # Convert to matrix and return the specific rows for S
     s_indices = [s_to_index[s] for s in S]
     return ret_df[s_indices, :]
-#result = pi_hat_sreg(S, D, inverse = False)
-#print(result)
-
-# NOW WRITE FOR CREG!
-#data = pd.read_csv("/Users/trifonovjuri/Desktop/sreg.py/src/sreg.py/data_cl.csv")
-#print(data.head())
-# Select the columns
-#Y = data['Y']
-#D = data['D']
-#S = data['S']
-#G_id = data['G.id']
-#Ng = data['Ng']
-#X = data[['x_1', 'x_2']]
 
 #-------------------------------------------------------------------
 def pi_hat_creg(S, D, inverse=False):
@@ -106,6 +71,3 @@ def pi_hat_creg(S, D, inverse=False):
     # Convert to matrix and return the specific rows for S
     s_indices = [s_to_index[s] for s in S]
     return ret_df[s_indices, :]
-
-#pi_hat_creg(S, D, inverse=False)
-#pi_hat_creg(S, D, inverse=True)

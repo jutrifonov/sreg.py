@@ -1,6 +1,14 @@
+# The core
 import pandas as pd
 import numpy as np
-# The core
+
+from .data_check import check_data_types, check_integers, boolean_check, check_range
+from .check_cluster import check_cluster, check_cluster_lvl
+from .result import res_sreg, res_creg
+from .dgp_cluster import gen_cluster_sizes
+from .dgp_po import dgp_po_sreg, dgp_po_creg
+from .dgp_strata import form_strata_sreg, form_strata_creg
+from .dgp_obs import dgp_obs_sreg, dgp_obs_creg
 
 def sreg(Y, S=None, D=None, G_id=None, Ng=None, X=None, HC1=True):
     check_data_types(Y, S, D, G_id, Ng, X)
@@ -31,14 +39,11 @@ def sreg(Y, S=None, D=None, G_id=None, Ng=None, X=None, HC1=True):
     check_df = pd.DataFrame({'Y': Y, 'S': S, 'D': D, 'G_id': G_id, 'Ng': Ng, **X_dict})
     if G_id is None: 
         check_df=check_df.drop(columns=['G_id'])
-    #else:
-    #    check_df = pd.DataFrame({'Y': Y, 'S': S, 'D': D, 'G_id': G_id, **X_dict})
 
     if S is None:
         check_df=check_df.drop(columns=['S'])
     if Ng is None:
         check_df=check_df.drop(columns=['Ng'])
-    #check_df = pd.DataFrame({'Y': Y, 'S': S, 'D': D, 'G_id': G_id, 'Ng': Ng, **{f'X{i}': X[:, i] for i in range(X.shape[1])} if X is not None else {}})
 
     if check_df.isnull().any().any():
         print("Warning: The data contains one or more NA (or NaN) values. Proceeding while ignoring these values.")
@@ -89,23 +94,6 @@ def sreg(Y, S=None, D=None, G_id=None, Ng=None, X=None, HC1=True):
 
     return result
 
-# S[2]=0.23
-# G_id[5]=8.98
-# resultim=sreg(Y=Y, S=None, D=D, G_id=G_id, Ng=Ng, X=X, HC1=True)
-# print(resultim)
-# Ng = None
-# S=None
-# D[2]=1.2
-
-# aejapp=sreg(Y=Y, S=S, D=D, X=X)
-# print(aejapp)
-# X=None
-# print(aejapp)
-# Ng=None
-# G_id=None
-# G_id
-# X=None
-
 def sreg_rgen(n, Nmax=50, n_strata=5, tau_vec=[0], gamma_vec=[0.4, 0.2, 1], cluster=True, is_cov=True):
     if cluster:
         G = n
@@ -145,6 +133,3 @@ def sreg_rgen(n, Nmax=50, n_strata=5, tau_vec=[0], gamma_vec=[0.4, 0.2, 1], clus
             data_sim = pd.DataFrame({'Y': Y, 'S': S, 'D': D})
     
     return data_sim
-
-res_data_gen=sreg_rgen(n=1000, Nmax=50, n_strata=10, tau_vec=[0, 0.2, 0.2, 0.3, 0.9], gamma_vec=[0.4, 0.2, 1], cluster=False, is_cov=False)
-np.max(res_data_gen['D'])

@@ -1,5 +1,8 @@
 import numpy as np
 import pandas as pd
+
+from .pi_hat import pi_hat_sreg
+from .lin_adj import lin_adj_sreg
 #-------------------------------------------------------------------
 # %#     Function that implements \hat{\sigma^2} --
 # %#     i.e. the variance estimator
@@ -21,7 +24,6 @@ def as_var_sreg(Y, S, D, X=None, model=None, tau=None, HC1=True):
             data['I'] = (data['A'] != -999999).astype(int)
 
             mu_hat_d = lin_adj_sreg(d, data['S'], data.iloc[:, 3:(3 + X.shape[1])], model)
-             #lin_adj_sreg(d, data['S'], data.iloc[:, 3:(3+X.shape[1])], model)
             mu_hat_0 = lin_adj_sreg(0, data['S'], data.iloc[:, 3:(3 + X.shape[1])], model)
 
             Xi_tilde_1 = (mu_hat_d - mu_hat_0) + (data['Y'] - mu_hat_d) / data['pi']
@@ -110,33 +112,6 @@ def as_var_sreg(Y, S, D, X=None, model=None, tau=None, HC1=True):
 
     se_vec = np.sqrt(var_vec / n_vec)
     return se_vec
-
-
-
-# model = lm_iter_sreg(Y, S, D, X)
-# tau = tau_hat_sreg(Y, S, D, X, model)
-
-# as_var_sreg(Y, S, D, X, model=model, tau=tau, HC1=True)
-
-
-# tau = tau_hat_sreg(Y, S, D)
-
-# as_var_sreg(Y, S, D, X = None, model=None, tau=tau, HC1=True)
-
-
-
-
-# data = pd.read_csv("/Users/trifonovjuri/Desktop/sreg.py/src/sreg.py/data_cl.csv")
-# print(data.head())
-# Y = data['Y']
-# D = data['D']
-# S = data['S']
-# G_id = data['G.id']
-# Ng = data['Ng']
-# X = data[['x_1', 'x_2']]
-
-
-
 
 def as_var_creg(model=None, fit=None, HC1=False):
     var_vec = np.zeros(len(fit['tau_hat']))
@@ -249,21 +224,4 @@ def as_var_creg(model=None, fit=None, HC1=False):
             n_vec[d] = n
     se_vec = np.sqrt(var_vec / n_vec)
     return se_vec
-
-
-# model = lm_iter_creg(Y, S, D, G_id, Ng, X)
-# fit = tau_hat_creg(Y, S, D, G_id, Ng, X, model)
-# fit['tau_hat']
-# as_var_creg(model, fit, HC1 = False)
-
-
-# fit = tau_hat_creg(Y, S, D, G_id, Ng)
-# fit['tau_hat']
-# as_var_creg(model = None, fit = fit, HC1 = False)
-
-# fit = tau_hat_creg(Y, S, D, G_id, Ng = None)
-# fit['tau_hat']
-# as_var_creg(model = None, fit = fit, HC1 = False)
-
-
 

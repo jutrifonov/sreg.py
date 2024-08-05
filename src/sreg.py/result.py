@@ -1,6 +1,12 @@
 import numpy as np
 import pandas as pd
 from scipy.stats import norm
+
+from .lm import lm_iter_sreg, lm_iter_creg
+from .tau_hat import tau_hat_sreg, tau_hat_creg
+from .var_hat import as_var_sreg, as_var_creg
+from .output import Sreg
+from .check_cluster import check_cluster
 #-------------------------------------------------------------------
 # %#     The core function. It provides estimates of ATE, their s.e.,
 # %#     calculates t-stats and corresponding p-values
@@ -57,21 +63,15 @@ def res_sreg(Y, S=None, D=None, X=None, HC1=True):
             "lin_adj": None
         }
     
-    # class Sreg:
-    #     def __init__(self, res_dict):
-    #         self.__dict__.update(res_dict)
-    #     def __repr__(self):
-    #         return '\n'.join([f'{key}: {value}' for key, value in self.__dict__.items()])
-
     return Sreg(res_list)
-
-# result=res_sreg(Y=Y, S=S, D=D, X=X, HC1 = True)
-# # result=res_sreg(Y, S, D, X = None, HC1 = True)
-# print(result)
-
 
 
 def res_creg(Y, S, D, G_id, Ng, X, HC1=True):
+    if X is not None:
+        if 'Ng' in X.columns:
+            # Rename the 'Ng' in X to N_g to avoid bugs in Pandas
+            X = X.rename(columns={'Ng': 'N_g'})
+
     n = len(Y)
 
     if S is None:
@@ -170,23 +170,5 @@ def res_creg(Y, S, D, G_id, Ng, X, HC1=True):
                 "data": pd.DataFrame({'Y': Y, 'S': S, 'D': D, 'G_id': G_id}),
                 "lin_adj": None
             }
-    # class Sreg:
-    #     def __init__(self, res_dict):
-    #         self.__dict__.update(res_dict)
-    #     def __repr__(self):
-    #         return '\n'.join([f'{key}: {value}' for key, value in self.__dict__.items()])
-    
+
     return Sreg(res_list)
-    
-
-
-
-#  result=res_creg(Y=Y, S=S, D=D, G_id=G_id, Ng=Ng, X=X, HC1=False)
-#  print(result)
-# result['tau_hat']
-
-#  result=res_creg(Y = Y, S = S, D = D, G_id = G_id, Ng = None, X = X, HC1=False)
-#  print(result)
-
-#  result=res_creg(Y = Y, S = S, D = D, G_id = G_id, Ng = None, X = None, HC1=False)
-#  print(result)

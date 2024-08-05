@@ -1,9 +1,7 @@
-# %#     by taking as input the potential outcomes,
-# %#     matrix of strata assignments, pi.vec, and
-# %#     number of treatments
 import numpy as np
 import pandas as pd
 
+from .dgp_treatment import gen_treat_sreg, gen_treat_creg
 
 def dgp_obs_sreg(baseline, I_S, pi_vec, n_treat, is_cov=True):
     if n_treat != len(pi_vec):
@@ -39,39 +37,6 @@ def dgp_obs_sreg(baseline, I_S, pi_vec, n_treat, is_cov=True):
             "D": A
         }
     return ret_list
-
-
-
-baseline = dgp_po_sreg(n, theta_vec, gamma_vec, n_treat, is_cov)
-# Initial parameters
-
-pi_vec = np.full(n_treat, 1 / (n_treat + 1))
-num_strata=3
-I_S = form_strata_sreg(baseline, num_strata)
-# Assuming I_S and baseline are already defined
-num_strata = I_S.shape[1]
-n = len(baseline['Y_0'])
-
-A = np.zeros(n, dtype=int)
-l_seq = num_strata / 2
-
-pi_matr = np.ones((n_treat, num_strata))
-pi_vec_reshaped = pi_vec[:, np.newaxis]
-pi_matr_w = pi_matr * pi_vec[:, np.newaxis]
-
-# Main loop to assign treatments
-for k in range(1, num_strata + 1):
-    index = np.where(I_S[:, k - 1] == 1)[0]
-    ns = len(index)
-
-    A[index] = gen_treat_sreg(pi_matr_w, ns, k)
-
-# Example usage
-print(A)
-
-obs_otcm=dgp_obs_sreg(baseline, I_S, pi_vec, n_treat, is_cov=True)
-obs_otcm['D']
-obs_otcm=dgp_obs_sreg(data_pot, strata, pi_vec, n_treat, is_cov=True)
 
 def dgp_obs_creg(baseline, I_S, pi_vec, n_treat):
     if n_treat != len(pi_vec):
@@ -125,49 +90,3 @@ def dgp_obs_creg(baseline, I_S, pi_vec, n_treat):
     }
     
     return ret_list
-
-# Example usage
-np.random.seed(42)  # For reproducibility
-
-
-
-n = 100
-G = n
-Nmax = 50
-max_support = Nmax / 10 - 1
-Ng = gen_cluster_sizes(G, max_support)
-
-tau_vec = [0.5, 1.5]
-gamma_vec = [0.4, 0.2, 1]
-n_treat = 2
-
-np.random.seed(0)
-baseline = dgp_po_creg(Ng, G, tau_vec, gamma_vec=gamma_vec, n_treat=n_treat)
-
-# Initial parameters
-
-pi_vec = np.full(n_treat, 1 / (n_treat + 1))
-num_strata=3
-I_S = form_strata_creg(baseline, num_strata)
-# Assuming I_S and baseline are already defined
-num_strata = I_S.shape[1]
-n = len(baseline['Yig_0'])
-
-A = np.zeros(n, dtype=int)
-l_seq = num_strata / 2
-
-pi_matr = np.ones((n_treat, num_strata))
-pi_matr_w = pi_matr * pi_vec[:, np.newaxis]
-
-# Main loop to assign treatments
-for k in range(1, num_strata + 1):
-    index = np.where(I_S[:, k - 1] == 1)[0]
-    ns = len(index)
-
-    A[index] = gen_treat_sreg(pi_matr_w, ns, k)
-
-# Example usage
-print(A)
-
-obs_creg=dgp_obs_creg(baseline, I_S, pi_vec, n_treat)
-obs_creg

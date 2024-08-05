@@ -1,54 +1,12 @@
 import numpy as np
 import pandas as pd
+
+from .pi_hat import pi_hat_sreg, pi_hat_creg
+from .lin_adj import lin_adj_sreg, lin_adj_creg
 #-------------------------------------------------------------------
 # %#     Function that implements \hat{\tau} --
 # %#     i.e. the ATE estimator
 #-------------------------------------------------------------------
-
-# Load the dataframe from the CSV file
-# data = pd.read_csv("/Users/trifonovjuri/Desktop/sreg.py/src/sreg.py/data.csv")
-
-# # Display the first few rows of the dataframe
-# print(data.head())
-
-# # Select the columns
-# Y = data['gradesq34']
-# D = data['treatment']
-# S = data['class_level']
-
-# # Create a new DataFrame with selected columns
-# data_clean = pd.DataFrame({'Y': Y, 'D': D, 'S': S})
-
-# # Replace values in column D
-# data_clean['D'] = data_clean['D'].apply(lambda x: 0 if x == 3 else x)
-
-# # Extract the columns again
-# Y = data_clean['Y']
-# D = data_clean['D']
-# S = data_clean['S']
-
-# # Create a contingency table
-# contingency_table = pd.crosstab(data_clean['D'], data_clean['S'])
-# print(contingency_table)
-
-# # Select the columns
-# Y = data['gradesq34']
-# D = data['treatment']
-# S = data['class_level']
-# pills = data['pills_taken']
-# age = data['age_months']
-
-# # Create a new DataFrame with selected columns
-# data_clean = pd.DataFrame({'Y': Y, 'D': D, 'S': S, 'pills': pills, 'age': age})
-
-# # Replace values in column D
-# data_clean['D'] = data_clean['D'].apply(lambda x: 0 if x == 3 else x)
-
-# # Extract the columns again
-# Y = data_clean['Y']
-# D = data_clean['D']
-# S = data_clean['S']
-# X = data_clean[['pills', 'age']]
 
 def tau_hat_sreg(Y, S, D, X=None, model=None):
     tau_hat = np.zeros(np.max(D))
@@ -80,24 +38,6 @@ def tau_hat_sreg(Y, S, D, X=None, model=None):
                                    (mu_hat_d - mu_hat_0)
             tau_hat[d-1] = np.mean(Ksi_vec)
     return tau_hat
-
-# model = lm_iter_sreg(Y, S, D, X)
-
-
-# result = tau_hat_sreg(Y, S, D, X, model)
-# tau_hat_sreg(Y, S, D)
-
-
-# data = pd.read_csv("/Users/trifonovjuri/Desktop/sreg.py/src/sreg.py/data_cl.csv")
-# #print(data.head())
-# # Select the columns
-# Y = data['Y']
-# D = data['D']
-# S = data['S']
-# G_id = data['G.id']
-# Ng = data['Ng']
-# X = data[['x_1', 'x_2']]
-
 
 
 def tau_hat_creg(Y, S, D, G_id, Ng, X=None, model=None):
@@ -183,32 +123,3 @@ def tau_hat_creg(Y, S, D, G_id, Ng, X=None, model=None):
         }
     
     return rtrn_list
-
-# Ng=None
-# model = lm_iter_creg(Y, S, D, G_id, Ng, X)
-
-# resultim = tau_hat_creg(Y, S, D, G_id, Ng, X, model)
-# resultim['tau_hat']
-# resultim['mu_hat']
-# resultim['pi_hat_0']
-# resultim['data_list'][1]
-# resultim['Y_bar_g']
-# resultim['Ng']
-
-# resultim = tau_hat_creg(Y, S, D, G_id, Ng)
-# resultim['tau_hat']
-# resultim['mu_hat']
-# resultim['pi_hat']
-# resultim['pi_hat_0']
-# resultim['data_list'][1]
-# resultim['Y_bar_g']
-# resultim['Ng']
-
-# resultim = tau_hat_creg(Y, S, D, G_id, Ng = None)
-# resultim['tau_hat']
-# resultim['mu_hat']
-# resultim['pi_hat']
-# resultim['pi_hat_0']
-# resultim['data_list'][0]
-# resultim['Y_bar_g']
-# resultim['Ng']

@@ -14,11 +14,6 @@ def gen_rubin_formula_sreg(n_treat):
 
     return formula
 
-# # Example usage
-# n_treat = 1
-# rubin_formula = gen_rubin_formula_sreg(n_treat)
-# print(rubin_formula)
-
 def gen_rubin_formula_creg(n_treat):
     A_values = range(n_treat + 1)
 
@@ -34,8 +29,3 @@ def gen_rubin_formula_creg(n_treat):
             formula += " + "
 
     return formula
-
-# # Example usage
-# n_treat = 2
-# rubin_formula = gen_rubin_formula_creg(n_treat)
-# print(rubin_formula)
