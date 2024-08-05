@@ -105,3 +105,46 @@ def sreg(Y, S=None, D=None, G_id=None, Ng=None, X=None, HC1=True):
 # G_id=None
 # G_id
 # X=None
+
+def sreg_rgen(n, Nmax=50, n_strata=5, tau_vec=[0], gamma_vec=[0.4, 0.2, 1], cluster=True, is_cov=True):
+    if cluster:
+        G = n
+        max_support = Nmax / 10 - 1
+        Ng = gen_cluster_sizes(G, max_support)
+        data_pot = dgp_po_creg(Ng=Ng, G=G, tau_vec=tau_vec, gamma_vec=gamma_vec, n_treat=len(tau_vec))
+        strata = form_strata_creg(data_pot, n_strata)
+        strata_set = pd.DataFrame(strata)
+        strata_set['S'] = strata_set.idxmax(axis=1) + 1
+        pi_vec = [1 / (len(tau_vec) + 1)] * len(tau_vec)
+        data_sim = dgp_obs_creg(data_pot, I_S=strata, pi_vec=pi_vec, n_treat=len(tau_vec))
+        Y = data_sim['Y']
+        D = data_sim['D']
+        S = data_sim['S']
+        if is_cov:
+            X = data_sim['X']
+        Ng = data_sim['Ng']
+        G_id = data_sim['G_id']
+        if is_cov:
+            data_sim = pd.DataFrame({'Y': Y, 'S': S, 'D': D, 'G_id': G_id, 'Ng': Ng, **{f'X{i+1}': X[:, i] for i in range(X.shape[1])}})
+        else:
+            data_sim = pd.DataFrame({'Y': Y, 'S': S, 'D': D, 'G_id': G_id, 'Ng': Ng})
+    else:
+        data_pot = dgp_po_sreg(n=n, theta_vec=tau_vec, gamma_vec=gamma_vec, n_treat=len(tau_vec), is_cov=is_cov)
+        strata = form_strata_sreg(data_pot, num_strata=n_strata)
+        strata_set = pd.DataFrame(strata)
+        strata_set['S'] = strata_set.idxmax(axis=1) + 1
+        pi_vec = [1 / (len(tau_vec) + 1)] * len(tau_vec)
+        data_sim = dgp_obs_sreg(data_pot, I_S=strata, pi_vec=pi_vec, n_treat=len(tau_vec), is_cov=is_cov)
+        Y = data_sim['Y']
+        D = data_sim['D']
+        S = strata_set['S']
+        if is_cov:
+            X = np.array(data_sim['X'])
+            data_sim = pd.DataFrame({'Y': Y, 'S': S, 'D': D, **{f'X{i+1}': X[:, i] for i in range(X.shape[1])}})
+        else:
+            data_sim = pd.DataFrame({'Y': Y, 'S': S, 'D': D})
+    
+    return data_sim
+
+res_data_gen=sreg_rgen(n=1000, Nmax=50, n_strata=10, tau_vec=[0, 0.2, 0.2, 0.3, 0.9], gamma_vec=[0.4, 0.2, 1], cluster=False, is_cov=False)
+np.max(res_data_gen['D'])

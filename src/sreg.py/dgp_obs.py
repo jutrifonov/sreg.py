@@ -15,6 +15,7 @@ def dgp_obs_sreg(baseline, I_S, pi_vec, n_treat, is_cov=True):
     l_seq = num_strata / 2
 
     pi_matr = np.ones((n_treat, num_strata))
+    pi_vec = np.array(pi_vec).reshape(-1, 1)
     pi_matr_w = pi_matr * pi_vec
 
     for k in range(num_strata):
@@ -55,6 +56,7 @@ A = np.zeros(n, dtype=int)
 l_seq = num_strata / 2
 
 pi_matr = np.ones((n_treat, num_strata))
+pi_vec_reshaped = pi_vec[:, np.newaxis]
 pi_matr_w = pi_matr * pi_vec[:, np.newaxis]
 
 # Main loop to assign treatments
@@ -69,6 +71,7 @@ print(A)
 
 obs_otcm=dgp_obs_sreg(baseline, I_S, pi_vec, n_treat, is_cov=True)
 obs_otcm['D']
+obs_otcm=dgp_obs_sreg(data_pot, strata, pi_vec, n_treat, is_cov=True)
 
 def dgp_obs_creg(baseline, I_S, pi_vec, n_treat):
     if n_treat != len(pi_vec):
@@ -103,7 +106,7 @@ def dgp_obs_creg(baseline, I_S, pi_vec, n_treat):
     merged_data = data_long.merge(data_short, on="cl_id")
     A = merged_data['A'].values
     S = merged_data['S'].values
-    X = merged_data.iloc[:, 5:].values
+    X = merged_data.iloc[:, 4:].values
     Ng = merged_data['Ng'].values
 
     Y_obs = np.zeros(len(A))
