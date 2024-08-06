@@ -1,3 +1,4 @@
+import sreg
 # first_test
 res_data_gen=sreg_rgen(n=100000, tau_vec=[0, 0.2], cluster=False, is_cov=False)
 
