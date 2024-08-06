@@ -9,12 +9,14 @@ setup(
     author='Juri Trifonov, Yuehao Bai, Azeem Shaikh, Max Tabord-Meehan',
     author_email='jutrifonov@uchicago.edu',
     url='https://github.com/jutrifonov/sreg.py',
-    packages=find_packages(),
+    packages=find_packages(where='src'),
+    package_dir={'': 'src'},
     install_requires=[
         # List your package dependencies here
          'numpy>=1.15.0',
          'pandas>=0.23.0',
-         'scipy>=1.1.0'
+         'scipy>=1.1.0',
+         'statsmodels>=0.14.2'
     ],
     classifiers=[
         'Programming Language :: Python :: 3',
@@ -23,3 +25,5 @@ setup(
     ],
     python_requires='>=3.6',
 )
+
+
