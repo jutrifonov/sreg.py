@@ -23,13 +23,25 @@ def sreg(Y, S=None, D=None, G_id=None, Ng=None, X=None, HC1=True):
     Estimate the ATE(s) and the corresponding standard error(s) for a (collection of) treatment(s) relative to a control.
 
     Parameters:
-    Y: a numeric vector of the observed outcomes
-    S: a numeric vector of strata indicators indexed by {1, 2, 3, ...};  if None then the estimation is performed assuming no stratification
-    D: a numeric vector of treatments indexed by {0, 1, 2, ...}, where D = 0 denotes the control
-    G_id: a numeric vector of cluster indicators; if None then estimation is performed assuming treatment is assigned at the individual level
-    Ng: a numeric vector of cluster sizes; if None then Ng is assumed to be equal to the number of available observations in every cluster
-    X: a dataframe with columns representing the covariate values for every observation; if None then the estimator without linear adjustments is applied. (Note: sreg cannot use individual-level covariates for covariate adjustment in cluster-randomized experiments. Any individual-level covariates will be aggregated to their cluster-level averages)
-    HC1: a True/False logical argument indicating whether the small sample correction should be applied to the variance estimator
+    Y: a numeric vector of the observed outcomes.
+    S: a numeric vector of strata indicators indexed by {1, 2, 3, ...};  if None then the estimation is performed assuming no stratification.
+    D: a numeric vector of treatments indexed by {0, 1, 2, ...}, where D = 0 denotes the control.
+    G_id: a numeric vector of cluster indicators; if None then estimation is performed assuming treatment is assigned at the individual level.
+    Ng: a numeric vector of cluster sizes; if None then Ng is assumed to be equal to the number of available observations in every cluster.
+    X: a dataframe with columns representing the covariate values for every observation; if None then the estimator without linear adjustments is applied. (Note: sreg cannot use individual-level covariates for covariate adjustment in cluster-randomized experiments. Any individual-level covariates will be aggregated to their cluster-level averages).
+    HC1: a True/False logical argument indicating whether the small sample correction should be applied to the variance estimator.
+
+    Returns:
+    An object of class Sreg that is a list containing the following elements:
+
+    tau_hat: a vector of ATE estimates.
+    se_rob: a vector of standard errors estimates.
+    t_stat: a vector of t-statistics.
+    p_value: a vector of corresponding p-values.
+    CI_left: a vector of the left bounds of the 95% as. confidence interval.
+    CI_right: a vector of the right bounds of the 95% as. confidence interval.
+    data: an original data of the form dataframe(Y, S, D, G_id, Ng, X).
+    lin_adj: a dataframe representing the covariates that were used in implementing linear adjustments.
     """
 
     check_data_types(Y, S, D, G_id, Ng, X)
