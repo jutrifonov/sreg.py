@@ -6,6 +6,8 @@ The package is designed to accommodate scenarios with multiple treatments and cl
 and accomodates optimal linear covariate adjustment based on baseline observable characteristics. The package 
 computes estimators and standard errors based on Bugni, Canay, Shaikh (2018); Bugni, Canay, Shaikh, Tabord-Meehan (2023); 
 and Jiang, Linton, Tang, Zhang (2023).
+
+Dependencies: numpy
 """
 # The core
 import pandas as pd
