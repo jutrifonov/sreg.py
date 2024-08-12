@@ -23,24 +23,24 @@ def sreg(Y, S=None, D=None, G_id=None, Ng=None, X=None, HC1=True):
     Estimate the ATE(s) and the corresponding standard error(s) for a (collection of) treatment(s) relative to a control.
 
     Parameters:
-    Y (float): a sequence of the observed outcomes.
-    S (int): a sequence of strata indicators indexed by {1, 2, 3, ...};  if None then the estimation is performed assuming no stratification.
-    D (int): a sequence of treatments indexed by {0, 1, 2, ...}, where D = 0 denotes the control.
-    G_id (int): a sequence of cluster indicators; if None then estimation is performed assuming treatment is assigned at the individual level.
-    Ng (int): a sequence of cluster sizes; if None then Ng is assumed to be equal to the number of available observations in every cluster.
+    Y (float): an array of the observed outcomes.
+    S (int): an array of strata indicators indexed by {1, 2, 3, ...};  if None then the estimation is performed assuming no stratification.
+    D (int): an array of treatments indexed by {0, 1, 2, ...}, where D = 0 denotes the control.
+    G_id (int): an array of cluster indicators; if None then estimation is performed assuming treatment is assigned at the individual level.
+    Ng (int): an array of cluster sizes; if None then Ng is assumed to be equal to the number of available observations in every cluster.
     X (pandas.DataFrame): a DataFrame with columns representing the covariate values for every observation; if None then the estimator without linear adjustments is applied. (Note: sreg cannot use individual-level covariates for covariate adjustment in cluster-randomized experiments. Any individual-level covariates will be aggregated to their cluster-level averages).
     HC1 (bool): a True/False logical argument indicating whether the small sample correction should be applied to the variance estimator.
 
     Returns:
-    Returns an object of class `Sreg` that is a dictionary containing the following elements:
+    Returns an object of class Sreg that is a dictionary containing the following elements:
 
-    - tau_hat: A numpy array of shape `(1, |A|)` containing the ATE estimates, where `|A|` represents the number of treatments.
-    - se_rob: A numpy array of shape `(1, |A|)` containing the standard error estimates, where `|A|` represents the number of treatments.
-    - t_stat: A numpy array of shape `(1, |A|)` containing the t-statistics, where `|A|` represents the number of treatments.
-    - p_value: A numpy array of shape `(1, |A|)` containing the corresponding p-values, where `|A|` represents the number of treatments.
-    - CI_left: A numpy array of shape `(1, |A|)` containing the left bounds of the 95% confidence interval.
-    - CI_right: A numpy array of shape `(1, |A|)` containing the right bounds of the 95% confidence interval.
-    - data: The original data provided, stored as a pandas DataFrame with the columns `[Y, S, D, G_id, Ng, X]`.
+    - tau_hat: A numpy array of shape (1, |A|) containing the ATE estimates, where |A| represents the number of treatments.
+    - se_rob: A numpy array of shape (1, |A|) containing the standard error estimates, where |A| represents the number of treatments.
+    - t_stat: A numpy array of shape (1, |A|) containing the t-statistics, where |A| represents the number of treatments.
+    - p_value: A numpy array of shape (1, |A|) containing the corresponding p-values, where |A| represents the number of treatments.
+    - CI_left: A numpy array of shape (1, |A|) containing the left bounds of the 95% confidence interval.
+    - CI_right: A numpy array of shape (1, |A|) containing the right bounds of the 95% confidence interval.
+    - data: The original data provided, stored as a pandas DataFrame with the columns [Y, S, D, G_id, Ng, X].
     - lin_adj: A pandas DataFrame representing the covariates that were used in implementing linear adjustments.
     """
 
