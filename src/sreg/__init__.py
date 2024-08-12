@@ -25,7 +25,7 @@ References:
 print("sreg package is being imported")
 
 # Import only the public functions and classes
-from .core import sreg, sreg_rgen
+from .core import sreg, sreg_rgen, AEJapp
 from .output import Sreg
 
 __all__ = ["sreg", "sreg_rgen", "Sreg"]
@@ -34,3 +34,4 @@ __all__ = ["sreg", "sreg_rgen", "Sreg"]
 sreg_rgen = sreg_rgen
 sreg = sreg
 Sreg = Sreg
+AEJapp = AEJapp

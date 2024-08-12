@@ -235,3 +235,11 @@ def sreg_rgen(n, Nmax=50, n_strata=5, tau_vec=[0], gamma_vec=[0.4, 0.2, 1], clus
             data_sim = pd.DataFrame({'Y': Y, 'S': S, 'D': D})
     
     return data_sim
+
+
+import pkgutil
+import io
+
+def AEJapp():
+    data = pkgutil.get_data('sreg', 'data/AEJapp.csv')
+    return pd.read_csv(io.BytesIO(data))
