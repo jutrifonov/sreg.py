@@ -23,13 +23,13 @@ def sreg(Y, S=None, D=None, G_id=None, Ng=None, X=None, HC1=True):
     Estimate the ATE(s) and the corresponding standard error(s) for a (collection of) treatment(s) relative to a control.
 
     Parameters:
-    Y (float): an array of the observed outcomes.
-    S (int): an array of strata indicators indexed by {1, 2, 3, ...};  if None then the estimation is performed assuming no stratification.
-    D (int): an array of treatments indexed by {0, 1, 2, ...}, where D = 0 denotes the control.
-    G_id (int): an array of cluster indicators; if None then estimation is performed assuming treatment is assigned at the individual level.
-    Ng (int): an array of cluster sizes; if None then Ng is assumed to be equal to the number of available observations in every cluster.
-    X (pandas.DataFrame): a DataFrame with columns representing the covariate values for every observation; if None then the estimator without linear adjustments is applied. (Note: sreg cannot use individual-level covariates for covariate adjustment in cluster-randomized experiments. Any individual-level covariates will be aggregated to their cluster-level averages).
-    HC1 (bool): a True/False logical argument indicating whether the small sample correction should be applied to the variance estimator.
+    - Y (float): an array of the observed outcomes.
+    - S (int): an array of strata indicators indexed by {1, 2, 3, ...};  if None then the estimation is performed assuming no stratification.
+    - D (int): an array of treatments indexed by {0, 1, 2, ...}, where D = 0 denotes the control.
+    - G_id (int): an array of cluster indicators; if None then estimation is performed assuming treatment is assigned at the individual level.
+    - Ng (int): an array of cluster sizes; if None then Ng is assumed to be equal to the number of available observations in every cluster.
+    - X (pandas.DataFrame): a DataFrame with columns representing the covariate values for every observation; if None then the estimator without linear adjustments is applied. (Note: sreg cannot use individual-level covariates for covariate adjustment in cluster-randomized experiments. Any individual-level covariates will be aggregated to their cluster-level averages).
+    - HC1 (bool): a True/False logical argument indicating whether the small sample correction should be applied to the variance estimator.
 
     Returns:
     Returns an object of class Sreg that is a dictionary containing the following elements:
@@ -42,6 +42,29 @@ def sreg(Y, S=None, D=None, G_id=None, Ng=None, X=None, HC1=True):
     - CI_right: A numpy array of shape (1, |A|) containing the right bounds of the 95% confidence interval.
     - data: The original data provided, stored as a pandas DataFrame with the columns [Y, S, D, G_id, Ng, X].
     - lin_adj: A pandas DataFrame representing the covariates that were used in implementing linear adjustments.
+
+    Examples:
+    >>> data=sreg_rgen(n=1000, tau_vec=[0], n_strata=4 cluster=False)
+    >>> Y = data["Y"]
+    >>> S = data["S"]
+    >>> D = data["D"]
+    >>> result = sreg(Y=Y, S=S, D=D, G_id=None, Ng=None, X=None)
+    >>> print(result)
+
+    Authors:
+    Juri Trifonov <jutrifonov@uchicago.edu>
+    Yuehao Bai <yuehao.bai@usc.edu>
+    Azeem Shaikh <amshaikh@uchicago.edu>
+    Max Tabord-Meehan <maxtm@uchicago.edu>
+
+    Maintainer:
+    Juri Trifonov <jutrifonov@uchicago.edu>
+
+    References:
+    Bugni, F. A., Canay, I. A., and Shaikh, A. M. (2018). Inference Under Covariate-Adaptive Randomization. \emph{Journal of the American Statistical Association}, 113(524), 1784–1796, \doi{10.1080/01621459.2017.1375934}.
+    Bugni, F., Canay, I., Shaikh, A., and Tabord-Meehan, M. (2024+). Inference for Cluster Randomized Experiments with Non-ignorable Cluster Sizes. \emph{Forthcoming in the Journal of Political Economy: Microeconomics}, \doi{10.48550/arXiv.2204.08356}.
+    Jiang, L., Linton, O. B., Tang, H., and Zhang, Y. (2023+). Improving Estimation Efficiency via Regression-Adjustment in Covariate-Adaptive Randomizations with Imperfect Compliance. \emph{Forthcoming in Review of Economics and Statistics}, \doi{10.48550/arXiv.2204.08356}.
+
     """
 
     check_data_types(Y, S, D, G_id, Ng, X)
