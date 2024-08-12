@@ -203,17 +203,22 @@ sreg_rgen(n, Nmax = 50, n_strata = 5,
 - **`X (pd.DataFrame)` -** A `DataFrame` with columns representing the covariate values for every observation.
 
 ### Example
-``` r
-library(sreg)
-data <- sreg.rgen(n = 1000, tau.vec = c(0), n.strata = 4, cluster = TRUE)
-> head(data)
-         Y S D      x_1       x_2
-1 1.717293 1 0 4.772092 2.4138491
-2 2.553695 2 0 5.413440 2.0551019
-3 2.237556 3 2 6.611161 0.9300293
-4 1.825809 3 1 2.735503 1.7839981
-5 5.536280 2 2 2.469239 2.0495611
-6 1.628753 2 0 4.887561 2.1327071
+``` python
+from sreg import sreg_rgen
+data = sreg_rgen(n = 1000, tau_vec = [0, 0.8], cluster = False, is_cov = True)
+print(data)
+            Y  S  D        X1        X2
+0    4.689501  1  0  7.120830  3.792420
+1    3.629002  3  2  3.234888  1.674029
+2    0.739461  3  1  4.822114  1.165004
+3    0.292031  4  0  4.360900  1.171521
+4    0.755504  5  1  6.417946  0.176026
+..        ... .. ..       ...       ...
+995  1.732812  4  0  3.695054  0.866644
+996  2.529121  4  0  5.449032  1.639192
+997  2.174121  3  1  4.929872  0.566262
+998  2.649385  3  0  3.535942  1.995133
+999  4.868684  2  2  7.111149  1.646865
 ```
 
 ## References
