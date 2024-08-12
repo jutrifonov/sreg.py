@@ -103,90 +103,75 @@ Returns an object of class `Sreg` that is a dictionary containing the following 
 
 ### Empirical Example
 
-Here, we provide the empirical application example using the data from (Chong et al., 2016), who studied the effect of iron deficiency anemia on school-age children's educational attainment and cognitive ability in Peru. The example replicates the empirical illustration from (Bugni et al., 2019). For replication purposes, the data is included in the package and can be accessed by running `data("AEJapp")`. This example can be accessed directly in `R` via `help(sreg)`.
+Here, we provide the empirical application example using the data from (Chong et al., 2016), who studied the effect of iron deficiency anemia on school-age children's educational attainment and cognitive ability in Peru. The example replicates the empirical illustration from (Bugni et al., 2019). For replication purposes, the data is included in the package and can be accessed by running `AEJapp()`.
 
-``` r
-library(sreg, dplyr, haven)
+``` python
+from sreg import sreg, sreg_rgen, AEJapp
 ```
-The description of the dataset can be accessed using `help()`:
-``` r
-help(AEJapp)
+We can upload the `AEJapp` dataset to the `Python` session via `AEJapp` function:
+``` python
+data = AEJapp()
 ```
-We can upload the `AEJapp` dataset to the `R` session via `data()`:
-``` r
-data("AEJapp")
-data <- AEJapp
-```
-It is pretty straightforward to prepare the data to fit the package syntax using `dplyr`:
-``` r
-Y <- data$gradesq34
-D <- data$treatment
-S <- data$class_level
-data.clean <- data.frame(Y, D, S)
-data.clean <- data.clean %>%
-  mutate(D = ifelse(D == 3, 0, D))
-Y <- data.clean$Y
-D <- data.clean$D
-S <- data.clean$S
-head(data.clean)
-     Y D S
-1 11.2 1 1
-2 12.4 0 3
-3 11.9 0 5
-4 13.1 0 1
-5 13.4 2 2
-6 10.7 0 1
+It is pretty straightforward to prepare the data to fit the package syntax:
+``` python
+Y = data['gradesq34']
+D = data['treatment']
+S = data['class_level']
+pills = data['pills_taken']
+age = data['age_months']
+data_clean = pd.DataFrame({'Y': Y, 'D': D, 'S': S, 'pills': pills, 'age': age})
+
+data_clean['D'] = data_clean['D'].apply(lambda x: 0 if x == 3 else x)
+
+Y = data_clean['Y']
+D = data_clean['D']
+S = data_clean['S']
+pills = data_clean['pills']
+age = data_clean['age']
+X = data_clean[['pills', 'age']]
 ```
 We can take a look at the frequency table of `D` and `S`:
-``` r
-table(D = data.clean$D, S = data.clean$S)
-   S
-D    1  2  3  4  5
-  0 15 19 16 12 10
-  1 16 19 15 10 10
-  2 17 20 15 11 10
+``` python
+contingency_table = pd.crosstab(data_clean['D'], data_clean['S'])
+print(contingency_table)
+S   1   2   3   4   5
+D                    
+0  15  19  16  12  10
+1  16  19  15  10  10
+2  17  20  15  11  10
 ```
 Now, it is straightforward to replicate the results from (Bugni et al, 2019) using `sreg`:
-``` r
-result <- sreg::sreg(Y = Y, S = S, D = D)
-print(result)
+``` python
+result = sreg(Y = Y, S = S, D = D, G_id = None, Ng = None, X = None, HC1 = True)
+print(result) 
 ```
-``` r
+``` python
 Saturated Model Estimation Results under CAR
-Observations: 215 
-Number of treatments: 2 
-Number of strata: 5 
+Observations: 215
+Number of treatments: 2
+Number of strata: 5
 ---
 Coefficients:
-       Tau   As.se   T-stat P-value CI.left(95%) CI.right(95%) Significance
-1 -0.05113 0.20645 -0.24766 0.80440     -0.45577       0.35351             
-2  0.40903 0.20651  1.98065 0.04763      0.00427       0.81379            *
+     Tau   As.se   T-stat  P-value  CI.left(95%)  CI.right(95%) Significance
+-0.05113 0.20645 -0.24766  0.80440      -0.45577        0.35351             
+ 0.40903 0.20651  1.98065  0.04763       0.00427        0.81379            *
 ---
-Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+Signif. codes:  0 `***` 0.001 `**` 0.01 `*` 0.05 `.` 0.1 ` ` 1
 ```
 Besides that, `sreg` allows adding linear adjustments (covariates) to the estimation procedure: 
-``` r
-pills <- data$pills_taken
-age <- data$age_months
-data.clean <- data.frame(Y, D, S, pills, age)
-data.clean <- data.clean %>%
-  mutate(D = ifelse(D == 3, 0, D))
-Y <- data.clean$Y
-D <- data.clean$D
-S <- data.clean$S
-X <- data.frame("pills" = data.clean$pills, "age" = data.clean$age)
-result <- sreg::sreg(Y, S, D, G.id = NULL, X = X)
+``` python
+result = sreg(Y = Y, S = S, D = D, G_id = None, Ng = None, X = X, HC1 = True)
 print(result)
-Saturated Model Estimation Results under CAR
-Observations: 215 
-Number of treatments: 2 
-Number of strata: 5 
+Saturated Model Estimation Results under CAR with linear adjustments
+Observations: 215
+Number of treatments: 2
+Number of strata: 5
 Covariates used in linear adjustments: pills, age
 ---
 Coefficients:
-       Tau   As.se   T-stat P-value CI.left(95%) CI.right(95%) Significance
-1 -0.02862 0.17964 -0.15929 0.87344     -0.38071       0.32348             
-2  0.34609 0.18362  1.88477 0.05946     -0.01381       0.70598            .
+     Tau   As.se   T-stat  P-value  CI.left(95%)  CI.right(95%) Significance
+-0.02862 0.17964 -0.15929  0.87344      -0.38071        0.32348             
+ 0.34609 0.18362  1.88477  0.05946      -0.01381        0.70598            .
 ---
 Signif. codes:  0 `***` 0.001 `**` 0.01 `*` 0.05 `.` 0.1 ` ` 1
 ```
