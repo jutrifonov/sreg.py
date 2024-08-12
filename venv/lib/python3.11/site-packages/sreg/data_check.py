@@ -23,9 +23,41 @@ def check_integers(S, D, G_id, Ng):
                 if not np.all(np.isnan(var) | (var.astype(int) == var)):
                     raise ValueError(f"Error: Variable {var_name} must contain only integer values.")
                 
+# def check_range(var, range_min=None, range_max=None):
+#     def find_missing_values(data, current_range_min, current_range_max):
+#         return set(range(current_range_min, current_range_max + 1)) - set(data.dropna().astype(int))
+                
 def check_range(var, range_min=None, range_max=None):
     def find_missing_values(data, current_range_min, current_range_max):
+        # Convert current_range_min and current_range_max to integers
+        current_range_min = int(current_range_min)
+        current_range_max = int(current_range_max)
         return set(range(current_range_min, current_range_max + 1)) - set(data.dropna().astype(int))
+
+    if isinstance(var, pd.DataFrame):
+        for col in var.columns:
+            data = var[col]
+            current_range_min = int(range_min) if range_min is not None else int(np.nanmin(data))
+            current_range_max = int(range_max) if range_max is not None else int(np.nanmax(data))
+
+            missing_values = find_missing_values(pd.Series(data), current_range_min, current_range_max)
+            if len(missing_values) > 0:
+                raise ValueError(
+                    f"Error: There are skipped values in the range of {col}: {missing_values}. "
+                    "Variables S and D must not contain any skipped values within the range. "
+                    "For example, if min(S) = 1 and max(S) = 3, then S should encompass values 1, 2, and 3."
+                )
+    else:
+        current_range_min = int(range_min) if range_min is not None else int(np.nanmin(var))
+        current_range_max = int(range_max) if range_max is not None else int(np.nanmax(var))
+
+        missing_values = find_missing_values(pd.Series(var), current_range_min, current_range_max)
+        if len(missing_values) > 0:
+            raise ValueError(
+                f"Error: There are skipped values in the range of {pd.Series(var).name}: {missing_values}. "
+                "Variables S and D must not contain any skipped values within the range. "
+                "For example, if min(S) = 1 and max(S) = 3, then S should encompass values 1, 2, and 3."
+            )
 
     if isinstance(var, pd.DataFrame):
         for col in var.columns:

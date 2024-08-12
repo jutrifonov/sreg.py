@@ -13,12 +13,12 @@ src/sreg/dgp_po.py
 src/sreg/dgp_rubin.py
 src/sreg/dgp_strata.py
 src/sreg/dgp_treatment.py
-src/sreg/first_test.py
 src/sreg/lin_adj.py
 src/sreg/lm.py
 src/sreg/output.py
 src/sreg/pi_hat.py
 src/sreg/result.py
+src/sreg/sreg_script.py
 src/sreg/subsample_filter.py
 src/sreg/tau_hat.py
 src/sreg/var_hat.py
@@ -27,4 +27,6 @@ src/sreg.egg-info/SOURCES.txt
 src/sreg.egg-info/dependency_links.txt
 src/sreg.egg-info/requires.txt
 src/sreg.egg-info/top_level.txt
+tests/__init__.py
+tests/test_core.py
 tests/test_utils.py

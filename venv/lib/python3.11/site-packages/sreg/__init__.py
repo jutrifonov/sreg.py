@@ -6,3 +6,8 @@ from .core import sreg, sreg_rgen
 from .output import Sreg
 
 __all__ = ["sreg", "sreg_rgen", "Sreg"]
+
+# Expose sreg_rgen and sreg directly in the sreg namespace
+sreg_rgen = sreg_rgen
+sreg = sreg
+Sreg = Sreg
