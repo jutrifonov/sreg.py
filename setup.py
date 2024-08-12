@@ -10,6 +10,10 @@ setup(
     author_email='jutrifonov@uchicago.edu',
     url='https://github.com/jutrifonov/sreg.py',
     packages=find_packages(where='src'),
+    include_package_data=True,
+    package_data={
+        'sreg': ['data/AEJapp.csv'],
+    },
     package_dir={'': 'src'},
     install_requires=[
         # List your package dependencies here
