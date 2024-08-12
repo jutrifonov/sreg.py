@@ -1,18 +1,10 @@
 # Stratified Randomized Experiments <img src="https://github.com/jutrifonov/sreg.dev/blob/main/logo.png" align="right" height="250" /></a>
 ![version](https://img.shields.io/badge/sreg-v.1.0.0.9000-green?style=flat&logo=github&labelColor=2A2523)
-[![Static Badge](https://img.shields.io/badge/CRAN-v.1.0.0-orange?logo=R&labelColor=2A2523)](https://cran.r-project.org/web/packages/sreg/index.html)
-[![R-CMD-check](https://github.com/jutrifonov/sreg/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/jutrifonov/sreg/actions/workflows/R-CMD-check.yaml)
 [![codecov](https://codecov.io/github/jutrifonov/sreg/graph/badge.svg?token=KAUXB0ETCA)](https://app.codecov.io/github/jutrifonov/sreg)
 
 The `sreg` package for `R`, offers a toolkit for estimating average treatment effects (ATEs) in stratified randomized experiments. The package is designed to accommodate scenarios with multiple treatments and cluster-level treatment assignments, and accomodates optimal linear covariate adjustment based on baseline observable characteristics. The package computes estimators and standard errors based on Bugni, Canay, Shaikh (2018); Bugni, Canay, Shaikh, Tabord-Meehan (2023); and Jiang, Linton, Tang, Zhang (2023).
 
-**Dependencies:** `dplyr`, `tidyr`, `extraDistr`, `rlang`
-
-**Suggests:** `haven`, `knitr`, `rmarkdown`, `testthat (>= 3.0.0)`
-
-**`R` version required:** `>= 2.10`
-
-[Latest Build (v.1.0.0.9000)](https://github.com/jutrifonov/sreg/blob/main/.github/package/sreg_1.0.0.9000.tar.gz)
+**Dependencies:** `numpy`, `pandas`, `scipy`
 
 ## Authors
 - Juri Trifonov jutrifonov@uchicago.edu
