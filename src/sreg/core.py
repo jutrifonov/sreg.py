@@ -1,3 +1,9 @@
+"""
+Sreg:Stratified Randomized Experiments
+============
+
+This package provides tools for performing XYZ operations. It includes modules for A, B, and C.
+"""
 # The core
 import pandas as pd
 import numpy as np
@@ -10,14 +16,10 @@ from .dgp_po import dgp_po_sreg, dgp_po_creg
 from .dgp_strata import form_strata_sreg, form_strata_creg
 from .dgp_obs import dgp_obs_sreg, dgp_obs_creg
 
-"""
-Sreg:Stratified Randomized Experiments
-============
 
-This package provides tools for performing XYZ operations. It includes modules for A, B, and C.
-"""
 
 def sreg(Y, S=None, D=None, G_id=None, Ng=None, X=None, HC1=True):
+    """Sreg provides estimates of ATE, corresponding st.errors and CI."""
     check_data_types(Y, S, D, G_id, Ng, X)
     check_integers(S, D, G_id, Ng)
     boolean_check(HC1)
