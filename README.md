@@ -2,7 +2,7 @@
 ![version](https://img.shields.io/badge/sreg-v.1.0.0.9000-green?style=flat&logo=github&labelColor=2A2523)
 [![codecov](https://codecov.io/github/jutrifonov/sreg/graph/badge.svg?token=KAUXB0ETCA)](https://app.codecov.io/github/jutrifonov/sreg)
 
-The `sreg` package for `R`, offers a toolkit for estimating average treatment effects (ATEs) in stratified randomized experiments. The package is designed to accommodate scenarios with multiple treatments and cluster-level treatment assignments, and accomodates optimal linear covariate adjustment based on baseline observable characteristics. The package computes estimators and standard errors based on Bugni, Canay, Shaikh (2018); Bugni, Canay, Shaikh, Tabord-Meehan (2023); and Jiang, Linton, Tang, Zhang (2023).
+The `sreg` package offers a toolkit for estimating average treatment effects (ATEs) in stratified randomized experiments. The package is designed to accommodate scenarios with multiple treatments and cluster-level treatment assignments, and accomodates optimal linear covariate adjustment based on baseline observable characteristics. The package computes estimators and standard errors based on Bugni, Canay, Shaikh (2018); Bugni, Canay, Shaikh, Tabord-Meehan (2023); and Jiang, Linton, Tang, Zhang (2023).
 
 **Dependencies:** `numpy`, `pandas`, `scipy`
 
@@ -16,14 +16,9 @@ The `sreg` package for `R`, offers a toolkit for estimating average treatment ef
 - Max Tabord-Meehan maxtm@uchicago.edu
 
 ## Supplementary files 
-- PDF version of the manual: [Download PDF](https://github.com/jutrifonov/sreg/blob/main/.github/README.pdf) 
-
 -  Sketch of the derivation of the ATE variance estimator under cluster-level treatment assignment: [Download PDF](https://github.com/jutrifonov/sreg.dev/blob/main/cluster.pdf)
 
 -  Expressions for the multiple treatment case (with and without clusters): [Download PDF](https://github.com/jutrifonov/sreg.dev/blob/main/multiple.pdf)
-
-
-
 
 ## Installation
 The official released version can be installed from `PyPI`.
@@ -41,17 +36,17 @@ pip install git+https://github.com/jutrifonov/sreg.py
 Estimates the ATE(s) and the corresponding standard error(s) for a (collection of) treatment(s) relative to a control.
 
 ### Syntax
-``` r
-sreg(Y, S = NULL, D, G.id = NULL, Ng = NULL, X = NULL, HC1 = TRUE)
+```python
+sreg(Y, S = None, D = None, G_id = None, Ng = None, X = None, HC1 = True)
 ```
 ### Arguments
-- **`Y` -** a numeric `vector/matrix/data.frame/tibble` of the observed outcomes;
-- **`S` -** a numeric `vector/matrix/data.frame/tibble` of strata indicators $\\{0, 1, 2, \ldots\\}$; if `NULL` then the estimation is performed assuming no stratification;
-- **`D` -** a numeric `vector/matrix/data.frame/tibble` of treatments indexed by $\\{0, 1, 2, \ldots\\}$, where `D = 0` denotes the control;
-- **`G.id` -** a numeric `vector/matrix/data.frame/tibble` of cluster indicators; if `NULL` then estimation is performed assuming treatment is assigned at the individual level;
-- **`Ng` -** a numeric `vector/matrix/data.frame/tibble` of cluster sizes; if `NULL` then `Ng` is assumed to be equal to the number of available observations in every cluster;
-- **`X` -** a `matrix/data.frame/tibble` with columns representing the covariate values for every observation; if `NULL` then the estimator without linear adjustments is applied [^*];
-- **`HC1` -** a `TRUE/FALSE` logical argument indicating whether the small sample correction should be applied to the variance estimator.
+- **`Y (float)` -** a `numpy.array` of the observed outcomes;
+- **`S (int)` -** a `numpy.array` of strata indicators $\\{0, 1, 2, \ldots\\}$; if `None` then the estimation is performed assuming no stratification;
+- **`D (int)` -** a `numpy.array` of treatments indexed by $\\{0, 1, 2, \ldots\\}$, where `D = 0` denotes the control;
+- **`G_id (int)` -** a `numpy.array` of cluster indicators; if `None` then estimation is performed assuming treatment is assigned at the individual level;
+- **`Ng (int)` -** a `numpy.array` of cluster sizes; if `None` then `Ng` is assumed to be equal to the number of available observations in every cluster;
+- **`X (DataFrame)` -** a `pandas.DataFrame` with columns representing the covariate values for every observation; if `None` then the estimator without linear adjustments is applied [^*];
+- **`HC1 (bool)` -** a `True/False` logical argument indicating whether the small sample correction should be applied to the variance estimator.
 [^*]: *Note: sreg cannot use individual-level covariates for covariate adjustment in cluster-randomized experiments. Any individual-level covariates will be aggregated to their cluster-level averages.*
 
 ### Data Structure
