@@ -175,31 +175,32 @@ Coefficients:
 ---
 Signif. codes:  0 `***` 0.001 `**` 0.01 `*` 0.05 `.` 0.1 ` ` 1
 ```
-## The function `sreg.rgen()`
+## The function `sreg_rgen()`
 Generates the observed outcomes, treatment assignments, strata indicators, cluster indicators, cluster sizes, and covariates for estimating the treatment effect following the stratified block randomization design under covariate-adaptive randomization (CAR).
 
 ### Syntax
-``` r
-sreg.rgen(n, Nmax = 50, n.strata,
-         tau.vec = c(0), gamma.vec = c(0.4, 0.2, 1),
-         cluster = TRUE, is.cov = TRUE)
+``` python
+sreg_rgen(n, Nmax = 50, n_strata = 5,
+          tau_vec = [0], gamma_vec = [0.4, 0.2, 1],
+          cluster = True, is_cov = True)
 ```
 ### Arguments
-- **`n` -** a total number of observations in a sample;
-- **`Nmax` -** a maximum size of generated clusters (maximum number of observations in a cluster);
-- **`n.strata` -** an `integer` specifying the number of strata;
-- **`tau.vec` -** a numeric $1 \times |\mathcal A|$ `vector` of treatment effects, where $|\mathcal A|$ represents the number of treatments;
-- **`gamma.vec` -** a numeric $1 \times 3$ `vector` of parameters corresponding to covariates;
-- **`cluster` -** a `TRUE/FALSE` argument indicating whether the dgp should use a cluster-level treatment assignment or individual-level;
-- **`is.cov` -** a `TRUE/FALSE` argument indicating whether the dgp should include covariates or not.
+- **`n (int)` -** The total number of observations in the sample;
+- **`Nmax (int)` -** The maximum size of generated clusters (maximum number of observations in a cluster);
+- **`n_strata (int)` -** An `integer` specifying the number of strata;
+- **`tau_vec (list of float)` -** A `list` of treatment effects of length |A|, where |A| represents the number of treatments;
+- **`gamma_vec (list of float)` -** A `list` of three parameters corresponding to covariates;
+- **`cluster (bool)` -** A `boolean` indicating whether the data generation process (DGP) should use cluster-level treatment assignment (`True`) or individual-level treatment assignment (`False`);
+- **`is.cov (bool)` -** A `boolean` indicating whether the DGP should include covariates (`True`) or not (`False`).
 
 ### Return Value
-- **`Y` -** a numeric $n \times 1$ `vector` of the observed outcomes;
-- **`S` -** a numeric $n \times 1$ `vector` of strata indicators;
-- **`D` -** a numeric $n \times 1$ `vector` of treatments indexed by $\\{0, 1, 2, \ldots\\}$, where `D = 0` denotes the control;
-- **`G.id` -** a numeric $n \times 1$ `vector` of cluster indicators;
-- **`Ng` -** a numeric `vector/matrix/data.frame` of cluster sizes; if `NULL` then `Ng` is assumed to be equal to the number of available observations in every cluster;
-- **`X` -** a `data.frame` with columns representing the covariate values for every observation.
+`pd.DataFrame`: A `DataFrame` with `n` observations containing the generated values of the following variables:
+- **`Y (pd.Series of float)` -** A numeric Series of length `n` representing the observed outcomes;
+- **`S (pd.Series of int)` -** A numeric Series of length `n` representing the strata indicators;
+- **`D (pd.Series of int)` -** A numeric Series of length `n` representing the treatment assignments, indexed by $\{0, 1, 2, ...\}$, where `D = 0` denotes the control group;
+- **`G_id (pd.Series of int)` -** A numeric Series of length `n` representing the cluster indicators;
+- **`Ng (pd.DataFrame)` -** A numeric Series of length `n` representing the cluster indicators;
+- **`X (pd.DataFrame)` -** A `DataFrame` with columns representing the covariate values for every observation.
 
 ### Example
 ``` r
