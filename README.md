@@ -52,7 +52,7 @@ sreg(Y, S = None, D = None, G_id = None, Ng = None, X = None, HC1 = True)
 ### Data Structure
 Here we provide an example of a data frame that can be used with `sreg`.
 ``` r
-|       Y      | S | D | G.id | Ng |     x_1    |      x_2      |
+|       Y      | S | D | G_id | Ng |     X1     |      X2       |
 |--------------|---|---|------|----|------------|---------------|
 | -0.57773576  | 2 | 0 |  1   | 10 |  1.5597899 |  0.03023334   |
 |  1.69495638  | 2 | 0 |  1   | 10 |  1.5597899 |  0.03023334   |
@@ -67,40 +67,39 @@ Here we provide an example of a data frame that can be used with `sreg`.
 ### Summary
 
 `sreg` prints a *"Stata-style"* table containing the ATE estimates, corresponding standard errors, $t$-statistics, $p$-values, $95$% asymptotic confidence intervals, and significance indicators for different levels $\alpha$. The example of the printed output is provided below.
-``` r
-Saturated Model Estimation Results under CAR with clusters and linear adjustments
-Observations: 30000 
-Clusters: 1000 
-Number of treatments: 2 
-Number of strata: 4 
-Covariates used in linear adjustments: x_1, x_2
+```python
+Saturated Model Estimation Results under CAR with clusters
+Observations: 24680
+Clusters: 1000
+Number of treatments: 2
+Number of strata: 5
 ---
 Coefficients:
-      Tau   As.se   T-stat P-value CI.left(95%) CI.right(95%) Significance
-1 0.01614 0.04513  0.35753 0.72069     -0.07232        0.1046             
-2 0.78642 0.04642 16.94263 0.00000      0.69545        0.8774          ***
+     Tau   As.se   T-stat  P-value  CI.left(95%)  CI.right(95%) Significance
+-0.03836 0.09008 -0.42585  0.67021      -0.21491        0.13819             
+ 0.80719 0.09096  8.87453  0.00000       0.62892        0.98546          ***
 ---
 Signif. codes:  0 `***` 0.001 `**` 0.01 `*` 0.05 `.` 0.1 ` ` 1
 ```
 ### Return Value
 
-The function returns an object of class `sreg` that is a list containing the following elements:
+Returns an object of class `Sreg` that is a dictionary containing the following elements:
 
-- **`tau.hat` -**  a $1 \times |\mathcal A|$ vector of ATE estimates, where $|\mathcal A|$ represents the number of treatments;
+- **`tau_hat` -**  a numpy array of shape $(1, |A|)$ containing the ATE estimates, where $|A|$ represents the number of treatments;
   
-- **`se.rob` -** a $1 \times |\mathcal A|$ vector of standard errors estimates, where $|\mathcal A|$ represents the number of treatments;
+- **`se_rob` -** a numpy array of shape $(1, |A|)$ containing the standard error estimates, where $|A|$ represents the number of treatments;
   
-- **`t.stat` -** a $1 \times |\mathcal A|$ vector of $t$-statistics, where $|\mathcal A|$ represents the number of treatments;
+- **`t_stat` -** a numpy array of shape $(1, |A|)$ containing the t-statistics, where $|A|$ represents the number of treatments;
   
-- **`p.value` -** a $1 \times |\mathcal A|$ vector of corresponding $p$-values, where $|\mathcal A|$ represents the number of treatments;
+- **`p_value` -** a numpy array of shape $(1, |A|)$ containing the corresponding p-values, where $|A|$ represents the number of treatments;
   
-- **`CI.left` -** a $1 \times |\mathcal A|$ vector of the left bounds of the $95$% as. confidence interval;
+- **`CI_left` -** a numpy array of shape $(1, |A|)$ containing the left bounds of the $95$% as. confidence interval;
   
-- **`CI.right` -** a $1 \times |\mathcal A|$ vector of the right bounds of the $95$% as. confidence interval;
+- **`CI_right` -** a numpy array of shape $(1, |A|)$ containing the right bounds of the $95$% as. confidence interval;
   
-- **`data` -** an original data of the form `data.frame(Y, S, D, G.id, Ng, X)`;
+- **`data` -** the original data provided, stored as a `pandas DataFrame` with the columns `[Y, S, D, G_id, Ng, X]`;
   
-- **`lin.adj` -** a `data.frame` representing the covariates that were used in implementing linear adjustments.
+- **`lin_adj` -** a `pandas DataFrame` representing the covariates that were used in implementing linear adjustments.
 
 ### Empirical Example
 
