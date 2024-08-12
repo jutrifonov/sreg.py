@@ -26,78 +26,15 @@ The `sreg` package for `R`, offers a toolkit for estimating average treatment ef
 
 
 ## Installation
-The official released version can be installed from `CRAN`.
-``` r
-install.packages('sreg')
+The official released version can be installed from `PyPI`.
 ```
-``` r
-trying URL 'https://cran.rstudio.com/bin/macosx/big-sur-arm64/contrib/4.3/sreg_1.0.0.tgz'
-Content type 'application/x-gzip' length 120316 bytes (117 KB)
-==================================================
-downloaded 117 KB
-
-
-The downloaded binary packages are in
-	/var/folders/mp/06gjwr8j56zdp5j2vgdkd4z40000gq/T//RtmpuxHwlp/downloaded_packages
+pip install sreg
 ```
-``` r
-library(sreg)
+<<< EDIT AFTER UPLOADING >>>
+
+The latest development version can be installed from `GitHub`. 
 ```
-```r
-
-#>  ____  ____  _____ ____      Stratified Randomized
-#> / ___||  _ \| ____/ ___|     Experiments
-#> \___ \| |_) |  _|| |  _  
-#>  ___) |  _ <| |__| |_| |  
-#> |____/|_| \_\_____\____| version 1.0.0
-
-#> Type 'citation("sreg")' for citing this R package in publications. 
-```
-The latest development version can be installed using `devtools`. 
-``` r
-library(devtools)
-install_github("jutrifonov/sreg")
-```
-
-``` r
-Using GitHub PAT from the git credential store.
-Downloading GitHub repo jutrifonov/sreg@HEAD
-── R CMD build ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-✔  checking for file ‘/private/var/folders/mp/06gjwr8j56zdp5j2vgdkd4z40000gq/T/RtmpuxHwlp/remotes18132b745523/jutrifonov-sreg-3fc68f6/DESCRIPTION’ ...
-─  preparing ‘sreg’:
-✔  checking DESCRIPTION meta-information ...
-─  checking for LF line-endings in source and make files and shell scripts
-─  checking for empty or unneeded directories
-─  building ‘sreg_1.0.0.9000.tar.gz’
-   
-* installing *source* package ‘sreg’ ...
-** using staged installation
-** R
-** data
-*** moving datasets to lazyload DB
-** inst
-** byte-compile and prepare package for lazy loading
-** help
-*** installing help indices
-** building package indices
-** installing vignettes
-** testing if installed package can be loaded from temporary location
-** testing if installed package can be loaded from final location
-** testing if installed package keeps a record of temporary installation path
-* DONE (sreg)
-Adding ‘sreg_1.0.0.tgz’ to the cache
-```
-``` r
-library(sreg)
-
-#>  ____  ____  _____ ____      Stratified Randomized
-#> / ___||  _ \| ____/ ___|     Experiments
-#> \___ \| |_) |  _|| |  _  
-#>  ___) |  _ <| |__| |_| |  
-#> |____/|_| \_\_____\____| version 1.0.0.9000
-                           
-
-Type 'citation("sreg")' for citing this R package in publications.                 
+pip install git+https://github.com/jutrifonov/sreg.py
 ```
 
 ## The function `sreg()`
