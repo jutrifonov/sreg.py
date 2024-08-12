@@ -1,8 +1,11 @@
 """
 Sreg:Stratified Randomized Experiments
 ============
-
-This package provides tools for performing XYZ operations. It includes modules for A, B, and C.
+The sreg package offers a toolkit for estimating average treatment effects (ATEs) in stratified randomized experiments. 
+The package is designed to accommodate scenarios with multiple treatments and cluster-level treatment assignments, 
+and accomodates optimal linear covariate adjustment based on baseline observable characteristics. The package 
+computes estimators and standard errors based on Bugni, Canay, Shaikh (2018); Bugni, Canay, Shaikh, Tabord-Meehan (2023); 
+and Jiang, Linton, Tang, Zhang (2023).
 """
 # The core
 import pandas as pd
@@ -151,6 +154,47 @@ def sreg(Y, S=None, D=None, G_id=None, Ng=None, X=None, HC1=True):
     return result
 
 def sreg_rgen(n, Nmax=50, n_strata=5, tau_vec=[0], gamma_vec=[0.4, 0.2, 1], cluster=True, is_cov=True):
+    """
+    Generate a Pseudo-Random Sample under the Stratified Block Randomization Design
+
+    This function generates the observed outcomes, treatment assignments, strata indicators, cluster indicators, cluster sizes, and covariates for estimating the treatment effect within the context of a stratified block randomization design under covariate-adaptive randomization (CAR).
+
+    Parameters:
+    - n (int): The total number of observations in the sample.
+    - Nmax (int): The maximum size of generated clusters (maximum number of observations in a cluster).
+    - n_strata (int): An integer specifying the number of strata.
+    - tau_vec (list of float): A list of treatment effects of length |A|, where |A| represents the number of treatments.
+    - gamma_vec (list of float): A list of three parameters corresponding to covariates.
+    - cluster (bool): A boolean indicating whether the data generation process (DGP) should use cluster-level treatment assignment (True) or individual-level treatment assignment (False).
+    - is_cov (bool): A boolean indicating whether the DGP should include covariates (True) or not (False).
+
+    Returns:
+    pd.DataFrame: A DataFrame with `n` observations containing the generated values of the following variables:
+    
+    - Y (pd.Series of float): A numeric Series of length n representing the observed outcomes.
+    - S (pd.Series of int): A numeric Series of length n representing the strata indicators.
+    - D (pd.Series of int): A numeric Series of length n representing the treatment assignments, indexed by {0, 1, 2, ...}, where D = 0 denotes the control group.
+    - G_id (pd.Series of int): A numeric Series of length n representing the cluster indicators.
+    - X (pd.DataFrame): A DataFrame with columns representing the covariate values for every observation.
+
+    Examples:
+    >>> data=sreg_rgen(n=1000, tau_vec=[0, 0.4], n_strata=4, cluster=True, is_cov=True)
+
+    Authors:
+    Juri Trifonov <jutrifonov@uchicago.edu>
+    Yuehao Bai <yuehao.bai@usc.edu>
+    Azeem Shaikh <amshaikh@uchicago.edu>
+    Max Tabord-Meehan <maxtm@uchicago.edu>
+
+    Maintainer:
+    Juri Trifonov <jutrifonov@uchicago.edu>
+
+    References:
+    Bugni, F. A., Canay, I. A., and Shaikh, A. M. (2018). Inference Under Covariate-Adaptive Randomization. \emph{Journal of the American Statistical Association}, 113(524), 1784–1796, \doi{10.1080/01621459.2017.1375934}.
+    Bugni, F., Canay, I., Shaikh, A., and Tabord-Meehan, M. (2024+). Inference for Cluster Randomized Experiments with Non-ignorable Cluster Sizes. \emph{Forthcoming in the Journal of Political Economy: Microeconomics}, \doi{10.48550/arXiv.2204.08356}.
+    Jiang, L., Linton, O. B., Tang, H., and Zhang, Y. (2023+). Improving Estimation Efficiency via Regression-Adjustment in Covariate-Adaptive Randomizations with Imperfect Compliance. \emph{Forthcoming in Review of Economics and Statistics}, \doi{10.48550/arXiv.2204.08356}.
+
+    """
     if cluster:
         G = n
         max_support = Nmax / 10 - 1
