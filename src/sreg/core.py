@@ -39,14 +39,14 @@ def sreg(Y, S=None, D=None, G_id=None, Ng=None, X=None, HC1=True):
     Returns:
     Returns an object of class Sreg that is a dictionary containing the following elements:
 
-    - tau_hat: A numpy array of shape (1, |A|) containing the ATE estimates, where |A| represents the number of treatments.
-    - se_rob: A numpy array of shape (1, |A|) containing the standard error estimates, where |A| represents the number of treatments.
-    - t_stat: A numpy array of shape (1, |A|) containing the t-statistics, where |A| represents the number of treatments.
-    - p_value: A numpy array of shape (1, |A|) containing the corresponding p-values, where |A| represents the number of treatments.
-    - CI_left: A numpy array of shape (1, |A|) containing the left bounds of the 95% confidence interval.
-    - CI_right: A numpy array of shape (1, |A|) containing the right bounds of the 95% confidence interval.
-    - data: The original data provided, stored as a pandas DataFrame with the columns [Y, S, D, G_id, Ng, X].
-    - lin_adj: A pandas DataFrame representing the covariates that were used in implementing linear adjustments.
+    - tau_hat: a numpy array of shape (1, |A|) containing the ATE estimates, where |A| represents the number of treatments.
+    - se_rob: a numpy array of shape (1, |A|) containing the standard error estimates, where |A| represents the number of treatments.
+    - t_stat: a numpy array of shape (1, |A|) containing the t-statistics, where |A| represents the number of treatments.
+    - p_value: a numpy array of shape (1, |A|) containing the corresponding p-values, where |A| represents the number of treatments.
+    - CI_left: a numpy array of shape (1, |A|) containing the left bounds of the 95% as. confidence interval.
+    - CI_right: a numpy array of shape (1, |A|) containing the right bounds of the 95% as. confidence interval.
+    - data: the original data provided, stored as a pandas DataFrame with the columns [Y, S, D, G_id, Ng, X].
+    - lin_adj: a pandas DataFrame representing the covariates that were used in implementing linear adjustments.
 
     Examples:
     >>> data=sreg_rgen(n=1000, tau_vec=[0], n_strata=4 cluster=False)
