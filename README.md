@@ -25,7 +25,6 @@ The official released version can be installed from `PyPI`.
 ```
 pip install sreg
 ```
-<<< EDIT AFTER UPLOADING >>>
 
 The latest development version can be installed from `GitHub`. 
 ```
