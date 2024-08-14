@@ -49,7 +49,7 @@ def sreg(Y, S=None, D=None, G_id=None, Ng=None, X=None, HC1=True):
     - lin_adj: a pandas DataFrame representing the covariates that were used in implementing linear adjustments.
 
     Examples:
-    >>> data=sreg_rgen(n=1000, tau_vec=[0], n_strata=4 cluster=False)
+    >>> data=sreg_rgen(n=1000, tau_vec=[0], n_strata=4, cluster=False)
     >>> Y = data["Y"]
     >>> S = data["S"]
     >>> D = data["D"]
