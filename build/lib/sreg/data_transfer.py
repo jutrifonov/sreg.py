@@ -51,3 +51,17 @@ X = data_clean[['pills', 'age']]
 # Display the first few rows of the dataframe
 print(data_clean.head())
 print(X.head())
+
+
+
+
+data=sreg_rgen(n=1000, tau_vec=[0, 0.2], n_strata=4, cluster=True, is_cov = True)
+Y = data["Y"]
+S = data["S"]
+D = data["D"]
+X = data[['X1', 'X2']]
+G_id = data["G_id"]
+Ng = data["Ng"]
+X.iloc[2, 0] = 1.34
+result = sreg(Y=Y, S=S, D=D, G_id=G_id, Ng=Ng, X=X)
+print(result)
