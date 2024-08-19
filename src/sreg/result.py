@@ -83,9 +83,10 @@ def res_creg(Y, S, D, G_id, Ng, X, HC1=True):
         df = pd.concat([df, X_df], axis=1)
         
         if not check_cluster(df):
+            print("Warning: sreg cannot use individual-level covariates for covariate adjustment in cluster-randomized experiments. Any individual-level covariates have been aggregated to their cluster-level averages.")
             X_0 = X
             df_mod = df.groupby('G_id').transform(lambda x: x.mean() if np.issubdtype(x.dtype, np.number) else x)
-            X = df_mod.iloc[:, 1:].values
+            X = df_mod
         else:
             X_0 = X
         
