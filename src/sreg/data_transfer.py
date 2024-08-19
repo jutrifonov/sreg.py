@@ -1,6 +1,8 @@
 # data for testing the development
 import pandas as pd
 import numpy as np
+from sreg import sreg
+from sreg import sreg_rgen
 
 
 # Load the dataframe from the CSV file
