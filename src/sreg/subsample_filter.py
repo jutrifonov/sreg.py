@@ -16,7 +16,7 @@ def subsample_ols_sreg(Y, S, D, X, s, d):
     X = np.array(X)
     
     # Create a DataFrame
-    data = pd.DataFrame({'Y': Y, 'S': S, 'D': D})
+    data = pd.DataFrame({'Y': np.asarray(Y), 'S': np.asarray(S), 'D': np.asarray(D)})
     X_df = pd.DataFrame(X, columns=[f'X{i}' for i in range(1, X.shape[1] + 1)])
     data = pd.concat([data, X_df], axis=1)
     
@@ -38,4 +38,3 @@ def subsample_ols_creg(data, s, d):
     
     # Return the filtered data
     return filtered_data
-

@@ -1,14 +1,24 @@
-from setuptools import setup, find_packages
+from pathlib import Path
+
+from setuptools import find_packages, setup
+
+ROOT = Path(__file__).parent
 
 setup(
     name='sreg',
-    version='1.0.1',
+    version='2.1.0',
     description='Stratified Randomized Experiments',
-    long_description=open('README.md').read(),
+    long_description=(ROOT / 'README.md').read_text(encoding='utf-8'),
     long_description_content_type='text/markdown',
     author='Juri Trifonov, Yuehao Bai, Azeem Shaikh, Max Tabord-Meehan',
-    author_email='jutrifonov@uchicago.edu',
-    url='https://github.com/jutrifonov/sreg.py',
+    author_email='jutrifonov@u.northwestern.edu',
+    url='https://github.com/jutrifonov/sreg_py',
+    project_urls={
+        'Documentation': 'https://github.com/jutrifonov/sreg_py/tree/main/docs',
+        'Source': 'https://github.com/jutrifonov/sreg_py',
+        'Issues': 'https://github.com/jutrifonov/sreg_py/issues',
+        'Changelog': 'https://github.com/jutrifonov/sreg_py/blob/main/CHANGELOG.md',
+    },
     packages=find_packages(where='src'),
     include_package_data=True,
     package_data={
@@ -16,18 +26,27 @@ setup(
     },
     package_dir={'': 'src'},
     install_requires=[
-        # List your package dependencies here
-         'numpy>=1.15.0',
-         'pandas>=0.23.0',
-         'scipy>=1.1.0',
-         'statsmodels>=0.14.2'
+        'numpy>=1.23',
+        'pandas>=1.5',
+        'scipy>=1.9',
+        'statsmodels>=0.14.2',
+        'matplotlib>=3.7',
     ],
     classifiers=[
         'Programming Language :: Python :: 3',
-        'License :: OSI Approved :: MIT License',
+        'Programming Language :: Python :: 3 :: Only',
+        'Programming Language :: Python :: 3.9',
+        'Programming Language :: Python :: 3.10',
+        'Programming Language :: Python :: 3.11',
+        'Programming Language :: Python :: 3.12',
+        'Programming Language :: Python :: 3.13',
+        'Programming Language :: Python :: 3.14',
         'Operating System :: OS Independent',
+        'Intended Audience :: Science/Research',
+        'Topic :: Scientific/Engineering',
     ],
-    python_requires='>=3.6',
+    license='MIT',
+    license_files=('LICENSE',),
+    keywords='causal-inference experiments randomization stratification',
+    python_requires='>=3.9',
 )
-
-

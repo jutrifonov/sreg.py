@@ -1,0 +1,18 @@
+cff-version: 1.2.0
+message: "If you use sreg in research, please cite this software."
+title: "sreg: Stratified Randomized Experiments"
+type: software
+version: 2.1.0
+url: "https://github.com/jutrifonov/sreg_py"
+repository-code: "https://github.com/jutrifonov/sreg_py"
+license: MIT
+authors:
+  - family-names: Trifonov
+    given-names: Juri
+    email: jutrifonov@u.northwestern.edu
+  - family-names: Bai
+    given-names: Yuehao
+  - family-names: Shaikh
+    given-names: Azeem
+  - family-names: Tabord-Meehan
+    given-names: Max

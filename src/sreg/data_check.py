@@ -3,25 +3,26 @@ import numpy as np
 import pandas as pd
 
 def check_data_types(Y, S, D, G_id, Ng, X):
-    non_null_vars = [var for var in [Y, S, D, G_id, Ng, X] if var is not None]
-    var_names = ['Y', 'S', 'D', 'G_id', 'Ng', 'X']
-
-    for var, name in zip([Y, S, D, G_id, Ng, X], var_names):
-        if var is not None:
-            if not (isinstance(var, (np.ndarray, pd.DataFrame, pd.Series, list)) or np.issubdtype(type(var), np.number)):
-                raise ValueError(f"Error: Variable {name} has a different type than matrix, numeric series, or data frame.")
+    for var in [Y, S, D, G_id, Ng, X]:
+        if var is None:
+            continue
+        if not isinstance(var, (np.ndarray, pd.DataFrame, pd.Series)):
+            raise ValueError("Error: At least one non-None input variable has a different type "
+                             "than matrix, numeric vector, or data frame.")
+        values=np.asarray(var)
+        if not np.issubdtype(values.dtype, np.number):
+            raise ValueError("Error: At least one non-None input variable has a different type "
+                             "than matrix, numeric vector, or data frame.")
 
 def check_integers(S, D, G_id, Ng):
     non_null_vars = {'S': S, 'D': D, 'G_id': G_id, 'Ng': Ng}
 
     for var_name, var in non_null_vars.items():
         if var is not None:
-            if isinstance(var, pd.DataFrame):
-                if not all(var.apply(lambda col: col.dropna().apply(float.is_integer).all())):
-                    raise ValueError(f"Error: Variable {var_name} must contain only integer values.")
-            else:
-                if not np.all(np.isnan(var) | (var.astype(int) == var)):
-                    raise ValueError(f"Error: Variable {var_name} must contain only integer values.")
+            values=np.asarray(var,dtype=float)
+            finite=values[~np.isnan(values)]
+            if not np.all(finite == np.floor(finite)):
+                raise ValueError(f"Error: Variable {var_name} must contain only integer values.")
                 
 # def check_range(var, range_min=None, range_max=None):
 #     def find_missing_values(data, current_range_min, current_range_max):
@@ -91,3 +92,13 @@ def is_boolean(x):
 def boolean_check(var):
     if not is_boolean(var):
         raise ValueError("Error: The value of HC must be either True or False. A non-boolean value was provided.")
+
+
+def check_within_strata_variation(data):
+    cov=[c for c in data.columns if c not in {'S','D','G_id'}]
+    return all((data.groupby('S')[c].nunique(dropna=False)>1).all() for c in cov)
+
+
+def check_within_strata_treatment_variation(data):
+    cov=[c for c in data.columns if c not in {'S','D','G_id'}]
+    return all((data.groupby(['S','D'])[c].nunique(dropna=False)>1).all() for c in cov)
